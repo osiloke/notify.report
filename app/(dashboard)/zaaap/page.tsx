@@ -1,6 +1,6 @@
 "use client";
 
-import OnboardingDashboard from "@/app/(dashboard)/openai/openai-onboarding";
+import OnboardingDashboard from "@/app/(dashboard)/zaaap/zaaap-onboarding";
 import Dashboard from "@/components/dashboard";
 import { LOCAL_STORAGE_KEY } from "@/lib/constants";
 import openai from "@/lib/services/openai";

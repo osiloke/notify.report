@@ -38,7 +38,7 @@ export const InstallSteps = () => {
   return (
     <Steps>
       <Step>
-        Go to{" "}
+        Add a channel{" "}
         <a
           className="underline text-blue-500"
           target="_blank"
@@ -47,7 +47,7 @@ export const InstallSteps = () => {
           https://platform.openai.com/account/usage
         </a>
       </Step>
-      <Step>Open Chrome Developer Tools</Step>
+      <Step>Send first message</Step>
       <div className="grid grid-cols-2 gap-4 items-center">
         <div className="flex flex-col justify-center items-center">
           <p className="text-center">Mac:</p>
@@ -72,7 +72,7 @@ export const InstallSteps = () => {
           />
         </div>
       </div>
-      <Step>Click the Network Tab</Step>
+      <Step>View message log when completed</Step>
       <img
         src="https://cdn.llm.report/onboarding-inst-1.png"
         alt="Instructions"
