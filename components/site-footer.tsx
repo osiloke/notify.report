@@ -146,7 +146,7 @@ export function SiteFooter() {
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2023{" "}
             <Link href="/" className="cursor-pointer">
-              wuuf is a service by vazapay limited
+              wuuf is a service by Vazapay Limited
             </Link>
             . All Rights Reserved.
           </span>
