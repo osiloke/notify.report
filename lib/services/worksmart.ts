@@ -36,8 +36,14 @@ export class Worksmart {
     return !!Worksmart.key;
   }
 
-  async getLogs({ skip, pageSize }): Promise<any> {
-    const query = { skip, size: pageSize };
+  async getLogs({
+    skip,
+    pageSize,
+  }: {
+    skip: number;
+    pageSize: number;
+  }): Promise<any> {
+    const query = { skip: `${skip}`, size: `${pageSize}` };
     try {
       const res = await axios.get(
         `${env.WORKSMART_API_URL}/v1/store/log?${new URLSearchParams(query)}`,
