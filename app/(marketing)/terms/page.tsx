@@ -8,8 +8,8 @@ const Terms = () => {
       </h1>
 
       <p>
-        llm.report operates the https://llm.report website, which provides
-        monitoring and reporting services.
+        wuuf operates the https://wuuf website, which provides monitoring and
+        reporting services.
       </p>
 
       <h2>Contact Us</h2>
@@ -17,7 +17,7 @@ const Terms = () => {
       <p>
         If you have any questions or suggestions about our Privacy Policy, do
         not hesitate to contact us at{" "}
-        <Link href="mailto:dillion@llm.report">dillion@llm.report</Link>.
+        <Link href="mailto:dillion@wuuf">dillion@wuuf</Link>.
       </p>
     </div>
   );

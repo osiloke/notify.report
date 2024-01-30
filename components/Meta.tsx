@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const DOMAIN = "https://llm.report";
+const DOMAIN = "https://wuuf";
 
 const Meta = ({
   title = "Wuuf | OpenAI API Analytics",

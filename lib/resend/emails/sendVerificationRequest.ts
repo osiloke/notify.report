@@ -21,6 +21,6 @@ const sendWebVerificationRequest =
   };
 
 export const sendVerificationRequest = sendWebVerificationRequest(
-  "Welcome to llm.report",
+  "Welcome to wuuf",
   `${env.RESEND_FROM_NAME} < ${env.RESEND_FROM_ADDRESS} >`
 );

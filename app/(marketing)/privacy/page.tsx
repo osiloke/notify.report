@@ -8,14 +8,14 @@ const Privacy = () => {
       </h1>
 
       <p>
-        llm.report operates the https://llm.report website, which provides
-        monitoring and reporting services.
+        wuuf operates the https://wuuf website, which provides monitoring and
+        reporting services.
       </p>
 
       <p>
         This page is used to inform website visitors regarding our policies with
         the collection, use, and disclosure of Personal Information if anyone
-        decided to use our Service, the llm.report website.
+        decided to use our Service, the wuuf website.
       </p>
 
       <p>
@@ -28,7 +28,7 @@ const Privacy = () => {
 
       <p>
         The terms used in this Privacy Policy have the same meanings as in our
-        Terms and Conditions, which is accessible at https://llm.report, unless
+        Terms and Conditions, which is accessible at https://wuuf, unless
         otherwise defined in this Privacy Policy.
       </p>
 
@@ -137,7 +137,7 @@ const Privacy = () => {
       <p>
         If you have any questions or suggestions about our Privacy Policy, do
         not hesitate to contact us at{" "}
-        <Link href="mailto:dillion@llm.report">dillion@llm.report</Link>.
+        <Link href="mailto:dillion@wuuf">dillion@wuuf</Link>.
       </p>
     </div>
   );

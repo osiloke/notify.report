@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Login | llm.report",
+  title: "Login | wuuf",
   description: "Login to your account",
 };
 

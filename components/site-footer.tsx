@@ -8,7 +8,7 @@ const footerNavs = [
     label: "Product",
     items: [
       // {
-      //   href: "https://docs.llm.report/features/openai",
+      //   href: "https://docs.wuuf/features/openai",
       //   name: "OpenAI Analytics",
       // },
       // {
@@ -16,7 +16,7 @@ const footerNavs = [
       //   name: "Logs",
       // },
       // {
-      //   href: "https://docs.llm.report/features/users",
+      //   href: "https://docs.wuuf/features/users",
       //   name: "User Analytics",
       // },
       {
@@ -29,15 +29,15 @@ const footerNavs = [
   //   label: "Developers",
   //   items: [
   //     {
-  //       href: "https://docs.llm.report",
+  //       href: "https://docs.wuuf",
   //       name: "Docs",
   //     },
   //     {
-  //       href: "https://github.com/dillionverma/llm.report/issues",
+  //       href: "https://github.com/dillionverma/wuuf/issues",
   //       name: "Feedback and Requests",
   //     },
   //     {
-  //       href: "https://github.com/dillionverma/llm.report/commits/main",
+  //       href: "https://github.com/dillionverma/wuuf/commits/main",
   //       name: "Changelog",
   //     },
   //   ],
@@ -54,7 +54,7 @@ const footerNavs = [
   //       name: "Twitter",
   //     },
   //     {
-  //       href: "mailto:dillion@llm.report",
+  //       href: "mailto:dillion@wuuf",
   //       name: "Email",
   //     },
   //   ],

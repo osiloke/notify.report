@@ -5,7 +5,7 @@ import { useUser } from "@/lib/hooks/user/useUser";
 import { subscriptionPlans } from "@/lib/stripe/subscriptionPlans";
 import { cn } from "@/lib/utils";
 import { BoltIcon } from "@heroicons/react/24/solid";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 
 type BillingInterval = "year" | "month";
@@ -15,7 +15,7 @@ type Name = "Free" | "Pro" | "Enterprise";
 // Create our number formatter.
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "USD",
+  currency: "NGN",
   // These options are needed to round to whole numbers if that's what you want.
   minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
   maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
@@ -37,19 +37,16 @@ const plans: Plan[] = [
   {
     name: "Free" as Name,
     cta: "Current Plan",
-    desc: "Perfect for tinkering on passion projects",
+    desc: "Perfect for testing out the platform",
     price: 0,
     priceAnnual: 0,
     priceIdMonth: "",
     priceIdYear: "",
     isMostPop: false,
     features: [
-      "100,000 logs / month",
-      "Detailed User Analytics",
-      "Track multiple API keys (soon)",
-      "Data Exports (soon)",
-      "Email / Slack Alerts (soon)",
-      // "1 member",
+      "100 messages / month",
+      "1 Whatsapp number",
+      "Detailed message Analytics",
       // "1 project",
     ],
   },
@@ -57,20 +54,19 @@ const plans: Plan[] = [
     name: "Pro" as Name,
     cta: "Upgrade to Pro",
     desc: "For production apps and teams.",
-    price: 20,
-    priceAnnual: 15,
-    priceIdMonth: "price_1NaV0jB24wj8TkEzdNo0HXp7",
-    priceIdYear: "price_1NaV0jB24wj8TkEzGVbNRFHf",
+    price: 40000,
+    priceAnnual: 35000,
+    priceIdMonth: "price_1NaV0jB24",
+    priceIdYear: "price_1NaV0jB2",
     isMostPop: true,
     features: [
-      "Unlimited logs / month",
-      "Detailed User Analytics",
-      "Track multiple API keys (soon)",
-      "Data Exports (soon)",
+      "Unlimited Whatsapp messages / month",
+      "Detailed message Analytics",
+      "Unlimited Whatsapp numbers (soon)",
+      "Messaging tools and AI (soon)",
       "Email / Slack Alerts (soon)",
       "Weekly / Monthly Reports (soon)",
-      "Unlimited team members (soon)",
-      "Unlimited projects (soon)",
+      "Team members (soon)",
       // "1 member",
       // "2 projects",
     ],
@@ -116,7 +112,7 @@ const plans: Plan[] = [
   {
     name: "Enterprise" as Name,
     cta: "Contact Us",
-    desc: "For large-scale applications managing serious workloads. Let us know what you need and we'll make it happen.",
+    desc: "For large-scale applications sending massive amounts of messages. Let us know what you need and we'll make it happen.",
     price: "Contact Us",
     priceAnnual: "Contact Us",
     priceIdMonth: "",
@@ -173,7 +169,7 @@ const Pricing = () => {
   const handleCheckout = (plan: Name) => {
     console.log("AA");
     if (!user) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
     console.log("BB");
@@ -210,7 +206,7 @@ const Pricing = () => {
           </h3>
           <div className="mt-3 max-w-xl">
             <p>
-              <strong>100k logs free every month.</strong> No credit card
+              <strong>100 messages free every month.</strong> No credit card
               required.
             </p>
           </div>
@@ -268,7 +264,7 @@ const Pricing = () => {
                       {item.price === "Contact Us" ? (
                         ""
                       ) : (
-                        <sub className="text-xs">/ month</sub>
+                        <sub className="text-xs">/ Number / month</sub>
                       )}
                     </span>
                   </div>

@@ -19,7 +19,7 @@ export default async function CommunitySection() {
         </div>
         <div className="mt-4 flex gap-4 justify-center items-center">
           <Link
-            href="https://github.com/dillionverma/llm.report/issues"
+            href="https://github.com/dillionverma/wuuf/issues"
             className={cn(
               buttonVariants({ size: "lg", variant: "default" }),
               "gap-2"

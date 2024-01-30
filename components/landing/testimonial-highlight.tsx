@@ -17,7 +17,7 @@ const TestimonialHighlight = () => {
                   className="text-gray-800 text-xl text-center font-semibold sm:text-2xl italic group-hover:-translate-y-1 transition-all duration-300 ease-in-out
                 "
                 >
-                  “🔥 llm.report OSS, instant, realtime LLM observability“
+                  “🔥 wuuf OSS, instant, realtime LLM observability“
                 </p>
               </blockquote>
               <div className="mt-6">

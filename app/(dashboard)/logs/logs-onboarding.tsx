@@ -130,7 +130,7 @@ const LogsOnboarding = ({
             </CardHeader>
             <CardContent>
               <video
-                src="https://cdn.llm.report/openai-demo.mp4"
+                src="https://cdn.wuuf/openai-demo.mp4"
                 autoPlay
                 loop
                 muted

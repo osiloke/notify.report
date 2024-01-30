@@ -23,24 +23,24 @@ const components: {
 }[] = [
   {
     title: "OpenAI Analytics",
-    href: "https://docs.llm.report/features/openai",
+    href: "https://docs.wuuf/features/openai",
     description:
       "Enter your OpenAI API key and get access to a dashboard of analytics.",
-    video: "https://cdn.llm.report/openai-demo.mp4",
+    video: "https://cdn.wuuf/openai-demo.mp4",
   },
   {
     title: "Logging",
-    href: "https://docs.llm.report/features/logs",
+    href: "https://docs.wuuf/features/logs",
     description:
       "Log your prompts to gain insights about latency, cost per request, and more.",
-    video: "https://cdn.llm.report/logs-demo.mp4",
+    video: "https://cdn.wuuf/logs-demo.mp4",
   },
   {
     title: "User Analytics",
-    href: "https://docs.llm.report/features/users",
+    href: "https://docs.wuuf/features/users",
     description:
       "Understand your cost per user, discover your power users, and adjust your pricing strategy.",
-    video: "https://cdn.llm.report/users-demo.mp4",
+    video: "https://cdn.wuuf/users-demo.mp4",
   },
 ];
 
@@ -107,9 +107,7 @@ export function MainNav() {
                       href="/"
                     >
                       <Icons.logo className="h-6 w-6" />
-                      <div className="mb-2 mt-4 text-lg font-medium">
-                        llm.report
-                      </div>
+                      <div className="mb-2 mt-4 text-lg font-medium">wuuf</div>
                       <p className="text-sm leading-tight text-muted-foreground">
                         messaging automation platform
                       </p>

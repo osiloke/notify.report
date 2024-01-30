@@ -163,7 +163,7 @@ const UserOnboarding = ({
             </CardHeader>
             <CardContent>
               <video
-                src="https://cdn.llm.report/users-demo.mp4"
+                src="https://cdn.wuuf/users-demo.mp4"
                 autoPlay
                 loop
                 muted

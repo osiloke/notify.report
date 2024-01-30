@@ -102,7 +102,7 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
         <Card>
           <Flex justifyContent="start" className="gap-4 mb-2">
             <OnboardingStep step={1} currentStep={step} />
-            <Title>llm.report setup instructions</Title>
+            <Title>wuuf setup instructions</Title>
           </Flex>
           <Text>
             We use your OpenAI session token to call the OpenAI API and create

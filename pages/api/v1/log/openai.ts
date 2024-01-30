@@ -44,20 +44,20 @@ export default async function handler(
     });
   }
 
-  // get llm.report api key
+  // get wuuf api key
   const llmApikey = getLlmReportApiKey(req);
   if (!llmApikey) {
     return res.status(401).json({
-      message: "Go to https://llm.report/ to get an API key.",
+      message: "Go to https://wuuf/ to get an API key.",
       error: "Missing API key in X-Api-Key header.",
     });
   }
 
-  // get llm.report user from api key
+  // get wuuf user from api key
   const user = await getUser(llmApikey);
   if (!user) {
     return res.status(401).json({
-      message: "Go to https://llm.report/ to get an API key.",
+      message: "Go to https://wuuf/ to get an API key.",
       error: "User not found.",
     });
   }

@@ -30,7 +30,7 @@ const Hero = () => {
       <div className="py-20 min-h-screen">
         <div className="max-w-screen flex flex-col items-center py-40 gap-6">
           {/* <m.a
-            href="https://github.com/dillionverma/llm.report"
+            href="https://github.com/dillionverma/wuuf"
             target="_blank"
             className="group bg-gradient-to-br from-teal-600 to-amber-600 hover:bg-white/[.1] border border-white/[.05] p-1 pl-4 rounded-full shadow-md gap-2 flex justify-center items-center opacity-30"
             variants={{
@@ -39,7 +39,7 @@ const Hero = () => {
             }}
           >
             <p className="inline-block text-white text-sm">
-              llm.report is now open-source! 🎉
+              wuuf is now open-source! 🎉
             </p>
             <span className="group-hover:bg-white/[.1] py-2 px-3 inline-flex justify-center items-center gap-x-2 rounded-full bg-white/[.075] font-semibold text-white text-sm">
               <ChevronRight className="w-4 h-4" />
@@ -139,7 +139,7 @@ const Hero = () => {
           <Suspense fallback={<div>Loading...</div>}> */}
         {/* <Dashboard /> */}
         {/* <video
-              src="https://cdn.llm.report/openai-demo.mp4"
+              src="https://cdn.wuuf/openai-demo.mp4"
               autoPlay
               loop
               muted

@@ -95,7 +95,7 @@ export function UserDropdownMenu() {
               <span>Ask a question</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="https://docs.llm.report" target="_blank">
+          <Link href="https://docs.wuuf" target="_blank">
             <DropdownMenuItem className="cursor-pointer">
               <Book className="mr-2 h-4 w-4" />
               <span>Documentation</span>
@@ -105,7 +105,7 @@ export function UserDropdownMenu() {
             </DropdownMenuItem>
           </Link>
           <Link
-            href="https://github.com/dillionverma/llm.report/issues"
+            href="https://github.com/dillionverma/wuuf/issues"
             target="_blank"
           >
             <DropdownMenuItem className="cursor-pointer">

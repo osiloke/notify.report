@@ -3,7 +3,7 @@ import { Flex, Text, Title } from "@tremor/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settings | llm.report",
+  title: "Settings | wuuf",
   description: "Manage your billing, team, and OpenAI settings here.",
 };
 

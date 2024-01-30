@@ -67,35 +67,23 @@ export const InstallSteps = () => {
         </div>
         <div className="flex justify-center items-center">
           <img
-            src="https://cdn.llm.report/onboarding-inst-0.png"
+            src="https://cdn.wuuf/onboarding-inst-0.png"
             alt="Instructions"
             style={{ maxWidth: "15vw" }}
           />
         </div>
       </div>
       <Step>View message log when completed</Step>
-      <img
-        src="https://cdn.llm.report/onboarding-inst-1.png"
-        alt="Instructions"
-      />
+      <img src="https://cdn.wuuf/onboarding-inst-1.png" alt="Instructions" />
       <Step>Click the Search Icon beside</Step>
-      <img
-        src="https://cdn.llm.report/onboarding-inst-2.png"
-        alt="Instructions"
-      />
+      <img src="https://cdn.wuuf/onboarding-inst-2.png" alt="Instructions" />
       <Step className="text-red-500">
         Refresh Your Screen While On Network Tab
       </Step>
       <Step>Search &apos;sess&apos; and click green highlight</Step>
-      <img
-        src="https://cdn.llm.report/onboarding-inst-03.png"
-        alt="Instructions"
-      />
+      <img src="https://cdn.wuuf/onboarding-inst-03.png" alt="Instructions" />
       <Step>Scroll and copy the session from the right side</Step>
-      <img
-        src="https://cdn.llm.report/onboarding-inst-04.png"
-        alt="Instructions"
-      />
+      <img src="https://cdn.wuuf/onboarding-inst-04.png" alt="Instructions" />
       <Step>Paste the session token below</Step>
       <p>Only paste the token itself, remove the `Bearer` prefix</p>
       <pre className="my-2">
@@ -152,7 +140,7 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
             </CardHeader>
             <CardContent>
               <video
-                src="https://cdn.llm.report/llm-report-onboarding-yt.mp4"
+                src="https://cdn.wuuf/llm-report-onboarding-yt.mp4"
                 autoPlay
                 loop
                 muted
@@ -237,7 +225,7 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
 //         <Card>
 //           <Flex justifyContent="start" className="gap-4 mb-2">
 //             <OnboardingStep step={1} currentStep={step} />
-//             <Title>llm.report setup instructions</Title>
+//             <Title>wuuf setup instructions</Title>
 //           </Flex>
 //           <Text>
 //             We use your OpenAI session token to call the OpenAI API and create
