@@ -21,7 +21,7 @@ const Docs = ({ code }: { code: any }) => {
     <Card>
       <Flex justifyContent="start" className="gap-4 mb-2">
         {/* <Step step={1} currentStep={step} /> */}
-        <Title>Log your first request</Title>
+        <Title>Send your first message</Title>
       </Flex>
 
       <Text>Update your code using the examples below.</Text>

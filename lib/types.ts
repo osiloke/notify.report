@@ -132,6 +132,11 @@ export type Model =
   | "GPT-3.5"
   | "InstructGPT"
   | "GPT base models"
+  | "Vaza Whatsapp"
+  | "Telegram"
+  | "Email"
+  | "SMS"
+  | "Meshtastic"
   | "Image models";
 
 export type GPT4Model =

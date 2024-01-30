@@ -16,11 +16,11 @@ export default async function MarketingLayout({
 
   return (
     <>
-      <Banner />
+      {/* <Banner /> */}
       <SiteHeader user={user} />
       <main className="flex-1 container">{children}</main>
       <SiteFooter />
-      <GridPattern
+      {/* <GridPattern
         width={40}
         height={40}
         x={-1}
@@ -28,7 +28,7 @@ export default async function MarketingLayout({
         className={cn(
           "-z-10 stroke-gray-300/30 [mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] "
         )}
-      />
+      /> */}
     </>
   );
 }

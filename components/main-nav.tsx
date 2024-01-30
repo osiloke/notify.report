@@ -111,17 +111,17 @@ export function MainNav() {
                         llm.report
                       </div>
                       <p className="text-sm leading-tight text-muted-foreground">
-                        llm observability and analytics platform
+                        messaging automation platform
                       </p>
                     </a>
                   </NavigationMenuLink>
                 </li>
 
                 <ListItem
-                  href="https://docs.llm.report/introduction"
+                  href="https://zaap.mintlify.app/message/single-message"
                   title="Installation"
                 >
-                  How to install and configure llm.report
+                  How to send your first whatsapp message
                 </ListItem>
                 {/* <ListItem href="/docs/primitives/typography" title="Typography">
                 Styles for headings, paragraphs, lists...etc
@@ -129,7 +129,7 @@ export function MainNav() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuTrigger>Products</NavigationMenuTrigger>
             <NavigationMenuContent data-state="open">
               <ul className="grid w-[400px] grid-cols-1 gap-3 p-4 md:w-[300px] lg:grid-cols-3 lg:w-[900px]">
@@ -145,9 +145,9 @@ export function MainNav() {
                 ))}
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           <NavigationMenuItem>
-            <Link href="https://docs.llm.report" legacyBehavior passHref>
+            <Link href="https://zaap.mintlify.app" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Docs
               </NavigationMenuLink>

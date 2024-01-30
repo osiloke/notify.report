@@ -1,6 +1,6 @@
 "use client";
 
-import OnboardingDashboard from "@/app/(dashboard)/zaaap/zaaap-onboarding";
+import OnboardingDashboard from "@/app/(dashboard)/wuuf/wuuf-onboarding";
 import Dashboard from "@/components/dashboard";
 import { LOCAL_STORAGE_KEY } from "@/lib/constants";
 import openai from "@/lib/services/openai";
@@ -38,8 +38,9 @@ const DashboardPage = () => {
         </Link>
         .
       </Callout> */}
-      {(!key || !validKey) && <OnboardingDashboard />}
-      {key && validKey && <Dashboard key={key} />}
+      {/* {(!key || !validKey) && <OnboardingDashboard />}
+      {key && validKey && <Dashboard key={key} />} */}
+      <Dashboard key={key} />
     </Suspense>
   );
 };

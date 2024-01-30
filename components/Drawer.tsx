@@ -18,19 +18,27 @@ import { BoltIcon } from "@heroicons/react/24/solid";
 import { Badge } from "@tremor/react";
 import { getDaysInMonth } from "date-fns";
 import { motion } from "framer-motion";
-import { ArrowUpDown, Download, Settings, User } from "lucide-react";
+import {
+  ArrowUpDown,
+  Download,
+  Settings,
+  User,
+  Key,
+  BellRing,
+  Activity,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const LOGS_PER_MONTH = 100000;
+const LOGS_PER_MONTH = 100;
 const HOME_LINKS = [
   {
-    text: "OpenAI Analytics",
-    Icon: () => <Icons.openai className="h-4 w-4" />,
-    href: "/openai",
+    text: "Dashboard",
+    Icon: () => <Activity className="h-4 w-4" />,
+    href: "/wuuf",
     badge: null,
   },
   {
@@ -40,14 +48,20 @@ const HOME_LINKS = [
     badge: null,
   },
   {
-    text: "Users",
-    Icon: () => <User className="h-4 w-4" />,
-    href: "/users",
-    badge: "New ✨",
+    text: "Channels",
+    Icon: () => <BellRing className="h-4 w-4" />,
+    href: "/channels",
+    badge: null,
   },
+  // {
+  //   text: "Users",
+  //   Icon: () => <User className="h-4 w-4" />,
+  //   href: "/users",
+  //   badge: "New ✨",
+  // },
   {
-    text: "Installation",
-    Icon: () => <Download className="h-4 w-4" />,
+    text: "API Keys",
+    Icon: () => <Key className="h-4 w-4" />,
     href: "/install",
     badge: null,
   },
@@ -141,7 +155,7 @@ const Drawer = () => {
             height={32}
             className="rounded-full"
           />
-          <h1 className="text-gray-800 font-semibold text-xl">LLM Report</h1>
+          <h1 className="text-gray-800 font-semibold text-xl">Wuuf</h1>
         </Link>
         <h2 className="mb-2 text-lg font-semibold tracking-tight">Home</h2>
         {renderLinks(HOME_LINKS)}
@@ -165,7 +179,7 @@ const Drawer = () => {
             /> */}
           </div>
           <div className="text-xs">
-            {numberFormat(logsLeft)} logs left this month
+            {numberFormat(logsLeft)} messages left this month
           </div>
           <div className="text-xs">~{nFormatter(projectedLogs)} projected</div>
         </CardContent>

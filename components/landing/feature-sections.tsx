@@ -14,7 +14,7 @@ const features = [
     description:
       "Just enter your OpenAI API key, and we fetch your data from the OpenAI API directly to create a dashboard. No need to install anything.",
     icon: Icons.openai,
-    video: "https://cdn.llm.report/openai-demo.mp4",
+    // video: "https://cdn.llm.report/openai-demo.mp4",
     cta: "Get Started",
     href: "/login",
     reverse: false,
@@ -26,7 +26,7 @@ const features = [
     description:
       "Change 1 line in your code and start logging your API requests. Optimize your token usage and start saving money.",
     icon: List,
-    video: "https://cdn.llm.report/logs-demo.mp4",
+    // video: "https://cdn.llm.report/logs-demo.mp4",
     cta: "Get Started",
     href: "/login",
     reverse: true,
@@ -38,7 +38,7 @@ const features = [
     description:
       "Analyze your cost per user and adjust your pricing to maximize revenue.",
     icon: Icons.user,
-    video: "https://cdn.llm.report/users-demo.mp4",
+    // video: "https://cdn.llm.report/users-demo.mp4",
     cta: "Get Started",
     href: "/login",
     reverse: false,
@@ -57,7 +57,7 @@ const FeatureSections = () => {
                   "lg:order-last": feature.reverse,
                 })}
               >
-                <h2 className="text-base font-semibold leading-7 text-orange-600">
+                <h2 className="text-base font-semibold leading-7 text-teal-600">
                   {feature.header}
                 </h2>
                 <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">

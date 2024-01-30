@@ -24,6 +24,10 @@ export const env = createEnv({
     RESEND_FROM_ADDRESS: z.string().optional(),
     RESEND_FROM_NAME: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
+
+    WORKSMART_API_URL: z.string().optional(),
+    WORKSMART_AUTH_TOKEN: z.string().optional(),
+    WORKSMART_GROUP: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_RESEND_ENABLED: z

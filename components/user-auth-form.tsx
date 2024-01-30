@@ -43,7 +43,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       email: data.email.toLowerCase(),
       password: data.password,
       redirect: false,
-      callbackUrl: "/openai",
+      callbackUrl: "/wuuf",
     });
 
     setIsLoading(false);
@@ -57,7 +57,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
 
     if (provider === "credentials") {
-      router.push(signInResult?.url || "/openai");
+      router.push(signInResult?.url || "/wuuf");
     } else {
       toast({
         title: "Check your email",
@@ -146,12 +146,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
         </>
       )}
-      <button
+      {/* <button
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGoogleLoading(true);
-          signIn("google", { callbackUrl: "/openai" });
+          signIn("google", { callbackUrl: "/wuuf" });
         }}
         disabled={isLoading || isGoogleLoading}
       >
@@ -161,13 +161,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.google className="mr-2 h-4 w-4" />
         )}{" "}
         Google
-      </button>
+      </button> */}
       <button
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGitHubLoading(true);
-          signIn("github", { callbackUrl: "/openai" });
+          signIn("github", { callbackUrl: "/wuuf" });
         }}
         disabled={isLoading || isGitHubLoading}
       >

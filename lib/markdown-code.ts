@@ -10,16 +10,10 @@ import {
 } from "shiki-processor";
 
 const CurlLogs = `
-\`\`\`bash
-curl https://api.openai.com/v1/chat/completions // [!code --] \\
-curl https://api.openai.withlogging.com/v1/chat/completions // [!code ++] \\
+\`\`\`bash 
+curl https://api.vazapay.com/v1/wuuf/logs \\
   -H "Content-Type: application/json" \\
-  -H "Authorization: Bearer $OPENAI_API_KEY" \\
-  -H "X-Api-Key: Bearer $LLM_REPORT_API_KEY" // [!code ++] \\
-  -d '{
-    "model": "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": "Hello!"}]
-  }'
+  -H "z-api-key: Bearer $WUUF_API_KEY" \\
 `;
 
 const JSLogs = `

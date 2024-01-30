@@ -28,11 +28,11 @@ const Hero = () => {
       }}
     >
       <div className="py-20 min-h-screen">
-        <div className="max-w-screen flex flex-col items-center py-20 gap-6">
+        <div className="max-w-screen flex flex-col items-center py-40 gap-6">
           {/* <m.a
             href="https://github.com/dillionverma/llm.report"
             target="_blank"
-            className="group bg-gradient-to-br from-red-600 to-amber-600 hover:bg-white/[.1] border border-white/[.05] p-1 pl-4 rounded-full shadow-md gap-2 flex justify-center items-center opacity-30"
+            className="group bg-gradient-to-br from-teal-600 to-amber-600 hover:bg-white/[.1] border border-white/[.05] p-1 pl-4 rounded-full shadow-md gap-2 flex justify-center items-center opacity-30"
             variants={{
               hidden: { opacity: 0, y: -10 },
               show: { opacity: 1, y: 0, transition: { type: "spring" } },
@@ -54,8 +54,8 @@ const Hero = () => {
             }}
           >
             <span className="text-primary-50 leading-none tracking-tight">
-              <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
-                Log and Monitor your AI Apps
+              <span className="bg-gradient-to-r from-teal-600 to-gray-600 bg-clip-text text-transparent">
+                Whatsapp automation for devs
               </span>{" "}
               {/* for OpenAI */}
               {/* LLM Ops */}
@@ -85,14 +85,14 @@ const Hero = () => {
           >
             <div className="grid md:grid-cols-1 place-items-center">
               <ShimmerButton
-                className="flex items-center justify-center shadow-2xl transition-all hover:shadow-[0_0_40px_8px_rgba(185,28,28,0.5)]"
-                background="radial-gradient(ellipse 80% 70% at 50% 120%, #f59e0b, #B91C1C)"
+                className="flex items-center justify-center shadow-2xl transition-all"
+                background="radial-gradient(ellipse 80% 70% at 50% 120%, #000000, #008080)"
                 onClick={() => {
                   router.push("/login");
                 }}
               >
                 <span className="whitespace-pre bg-gradient-to-b from-black from-30% to-gray-300/80 bg-clip-text text-center text-sm lg:text-2xl font-semibold leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 dark:text-transparent z-10">
-                  Get started for free
+                  Get started
                 </span>
                 <ChevronRight className="h-6 w-6 duration-150 ease-in-out transform group-hover:translate-x-1 m-auto" />
               </ShimmerButton>
@@ -125,28 +125,28 @@ const Hero = () => {
               show: { opacity: 1, y: 0, transition: { type: "spring" } },
             }}
           >
-            <BackedBy />
+            {/* <BackedBy /> */}
           </m.div>
         </div>
 
-        <m.div
+        {/* <m.div
           className="mx-auto max-w-[1200px]"
           variants={{
             hidden: { opacity: 0, y: -10 },
             show: { opacity: 1, y: 0, transition: { type: "spring" } },
           }}
         >
-          <Suspense fallback={<div>Loading...</div>}>
-            {/* <Dashboard /> */}
-            <video
+          <Suspense fallback={<div>Loading...</div>}> */}
+        {/* <Dashboard /> */}
+        {/* <video
               src="https://cdn.llm.report/openai-demo.mp4"
               autoPlay
               loop
               muted
               className="rounded-xl border shadow-2xl"
-            />
-          </Suspense>
-        </m.div>
+            /> */}
+        {/* </Suspense>
+        </m.div> */}
       </div>
     </m.section>
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Banner = () => {
   return (
-    <div className="relative isolate flex items-center gap-x-6 overflow-hidden  px-6 py-2.5 sm:px-3.5 justify-center bg-gradient-to-br from-red-600 to-amber-600 z-50">
+    <div className="relative isolate flex items-center gap-x-6 overflow-hidden  px-6 py-2.5 sm:px-3.5 justify-center bg-gradient-to-br from-teal-600 to-amber-600 z-50">
       <Link
         href="https://github.com/dillionverma/llm.report"
         target="_blank"

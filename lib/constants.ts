@@ -33,14 +33,10 @@ export const FADE_UP_ANIMATION_VARIANTS = {
 
 export const CATEGORIES: Category[] = [
   // "Total Cost ($)",
-  "Audio models",
-  "Embedding models",
-  "Fine-tuning models",
-  "GPT-4",
-  "GPT-3.5",
-  "InstructGPT",
-  "GPT base models",
-  "Image models",
+  "Vaza Whatsapp",
+  "Telegram",
+  "Email",
+  "SMS",
 ];
 
 export const IMAGE_RESOLUTIONS: ImageResolution[] = [

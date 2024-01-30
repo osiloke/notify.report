@@ -3,7 +3,7 @@ import Head from "next/head";
 const DOMAIN = "https://llm.report";
 
 const Meta = ({
-  title = "LLM Report | OpenAI API Analytics",
+  title = "Wuuf | OpenAI API Analytics",
   description = "Analyze your OpenAI API usage and billing in real-time.",
   image = `${DOMAIN}/screenshot.png`,
   type = "website",

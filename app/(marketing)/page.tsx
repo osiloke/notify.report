@@ -9,15 +9,15 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const user = await getCurrentUser();
-  if (user) redirect("/openai");
+  if (user) redirect("/wuuf");
   return (
     <>
       <Hero />
-      <TrustedBy />
-      <TestimonialHighlight />
+      {/* <TrustedBy /> */}
+      {/* <TestimonialHighlight /> */}
       <FeatureSections />
-      <Testimonials />
-      <CommunitySection />
+      {/* <Testimonials /> */}
+      {/* <CommunitySection /> */}
     </>
   );
 }

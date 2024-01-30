@@ -182,7 +182,7 @@ export default function Dashboard() {
         <div className="flex flex-row w-full gap-4">
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="flex flex-row gap-2">
-              <Title>OpenAI Analytics</Title>
+              <Title>Wuuf Analytics</Title>
 
               {!data?.user && (
                 <Badge
@@ -212,7 +212,7 @@ export default function Dashboard() {
                     </span>
                   )}
                 >
-                  waiting for key
+                  comming soon
                 </Badge>
               )}
 
@@ -260,7 +260,7 @@ export default function Dashboard() {
                     </span>
                   )}
                 >
-                  OpenAI cost API is down
+                  {/* OpenAI cost API is down */}
                 </Badge>
               )}
 
@@ -342,12 +342,12 @@ export default function Dashboard() {
       <TabGroup>
         <TabList className="mt-2">
           <Tab>Overview</Tab>
-          <Tab>
+          {/* <Tab>
             Detailed Analytics
             <span className="px-2 py-1 ml-2 bg-tremor-brand-muted text-tremor-brand-emphasis rounded-tremor-full">
               New ✨
             </span>
-          </Tab>
+          </Tab> */}
         </TabList>
         <TabPanels>
           <TabPanel>

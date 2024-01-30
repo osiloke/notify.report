@@ -9,14 +9,14 @@ const items = [
     title: "Billing",
     href: "/settings/billing",
   },
-  {
-    title: "Team",
-    href: "/settings/team",
-  },
-  {
-    title: "OpenAI",
-    href: "/settings/openai",
-  },
+  // {
+  //   title: "Team",
+  //   href: "/settings/team",
+  // },
+  // {
+  //   title: "OpenAI",
+  //   href: "/settings/openai",
+  // },
 ];
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}

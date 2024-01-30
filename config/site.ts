@@ -1,13 +1,11 @@
 export const siteConfig = {
-  name: "llm.report",
-  url: "https://llm.report",
-  ogImage: "https://llm.report/screenshot.png",
-  description: "Open-source logging and analytics for OpenAI.",
+  name: "wuuf",
+  url: "https://wuuf.vazapay.com",
+  ogImage: "https:///wuuf.vazapay.com/screenshot.png",
+  description: "Messaging automation platform for businesses.",
   links: {
-    twitter: "https://twitter.com/dillionverma",
-    github: "https://github.com/dillionverma/llm.report",
-    cal: "https://cal.com/dillionverma/llm-report-demo",
-    discord: "https://discord.gg/eVtDPmRWXm",
+    twitter: "https://twitter.com/vazapay",
+    github: "https://github.com/vazapay",
   },
   keywords: ["OpenAI", "ChatGPT", "GPT-3.5", "GPT-4", "Analytics"],
 };

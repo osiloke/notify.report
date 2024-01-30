@@ -7,58 +7,58 @@ const footerNavs = [
   {
     label: "Product",
     items: [
-      {
-        href: "https://docs.llm.report/features/openai",
-        name: "OpenAI Analytics",
-      },
-      {
-        href: "https://docs.llm.report/features/logs",
-        name: "Logs",
-      },
-      {
-        href: "https://docs.llm.report/features/users",
-        name: "User Analytics",
-      },
+      // {
+      //   href: "https://docs.llm.report/features/openai",
+      //   name: "OpenAI Analytics",
+      // },
+      // {
+      //   href: "https://wuuf.vazapay.com/features/logs",
+      //   name: "Logs",
+      // },
+      // {
+      //   href: "https://docs.llm.report/features/users",
+      //   name: "User Analytics",
+      // },
       {
         href: "/pricing",
         name: "Pricing",
       },
     ],
   },
-  {
-    label: "Developers",
-    items: [
-      {
-        href: "https://docs.llm.report",
-        name: "Docs",
-      },
-      {
-        href: "https://github.com/dillionverma/llm.report/issues",
-        name: "Feedback and Requests",
-      },
-      {
-        href: "https://github.com/dillionverma/llm.report/commits/main",
-        name: "Changelog",
-      },
-    ],
-  },
-  {
-    label: "Community",
-    items: [
-      {
-        href: "https://discord.gg/eVtDPmRWXm",
-        name: "Discord",
-      },
-      {
-        href: "https://twitter.com/dillionverma",
-        name: "Twitter",
-      },
-      {
-        href: "mailto:dillion@llm.report",
-        name: "Email",
-      },
-    ],
-  },
+  // {
+  //   label: "Developers",
+  //   items: [
+  //     {
+  //       href: "https://docs.llm.report",
+  //       name: "Docs",
+  //     },
+  //     {
+  //       href: "https://github.com/dillionverma/llm.report/issues",
+  //       name: "Feedback and Requests",
+  //     },
+  //     {
+  //       href: "https://github.com/dillionverma/llm.report/commits/main",
+  //       name: "Changelog",
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: "Community",
+  //   items: [
+  //     {
+  //       href: "https://discord.gg/eVtDPmRWXm",
+  //       name: "Discord",
+  //     },
+  //     {
+  //       href: "https://twitter.com/dillionverma",
+  //       name: "Twitter",
+  //     },
+  //     {
+  //       href: "mailto:dillion@llm.report",
+  //       name: "Email",
+  //     },
+  //   ],
+  // },
   {
     label: "Legal",
     items: [
@@ -76,18 +76,18 @@ const footerNavs = [
 ];
 
 const footerSocials = [
+  // {
+  //   href: "https://discord.gg/eVtDPmRWXm",
+  //   name: "Discord",
+  //   icon: <DiscordLogoIcon className="h-4 w-4" />,
+  // },
   {
-    href: "https://discord.gg/eVtDPmRWXm",
-    name: "Discord",
-    icon: <DiscordLogoIcon className="h-4 w-4" />,
-  },
-  {
-    href: "https://twitter.com/dillionverma",
+    href: "https://twitter.com/vazapay",
     name: "Twitter",
     icon: <Icons.twitter className="h-4 w-4" />,
   },
   {
-    href: "https://github.com/dillionverma",
+    href: "https://github.com/vazapay",
     name: "GitHub",
     icon: <Icons.gitHub className="h-4 w-4" />,
   },
@@ -102,7 +102,7 @@ export function SiteFooter() {
             <Link href="/" className="flex items-center gap-2">
               <Icons.logo className="h-8 w-8 text-primary" />
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                llm.report
+                wuuf
               </span>
             </Link>
             <p className="max-w-xs">{siteConfig.description}</p>
@@ -146,7 +146,7 @@ export function SiteFooter() {
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2023{" "}
             <Link href="/" className="cursor-pointer">
-              llm.report™
+              wuuf is a service by vazapay limited
             </Link>
             . All Rights Reserved.
           </span>

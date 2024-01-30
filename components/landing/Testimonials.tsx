@@ -56,11 +56,11 @@ export default async function Testimonials() {
         <div className="mx-auto max-w-md text-center sm:max-w-2xl">
           <h2 className="font-display text-4xl font-bold leading-tight text-black sm:text-5xl sm:leading-tight">
             Loved by{" "}
-            <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-teal-600 to-amber-600 bg-clip-text text-transparent">
               3,000+ users
             </span>{" "}
             and{" "}
-            <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-teal-600 to-amber-600 bg-clip-text text-transparent">
               companies
             </span>{" "}
             worldwide

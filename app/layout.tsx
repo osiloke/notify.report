@@ -19,7 +19,7 @@ import { Metadata } from "next";
 import "react-querybuilder/dist/query-builder.css";
 
 export const metadata: Metadata = {
-  title: "LLM Report",
+  title: "Wuuf",
   description: "Logging and Analytics for AI Apps",
 };
 

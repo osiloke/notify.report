@@ -164,38 +164,38 @@ const RequestDialog = ({
                                 <TR
                                   label="created at"
                                   value={new Date(
-                                    request.createdAt
+                                    request.created_at
                                   ).toLocaleString()}
                                 />
-                                <TR label="id" value={request.openai_id} />
+                                <TR label="id" value={request.id} />
                                 <TR label="url" value={request.url} />
-                                <TR label="ip" value={request.ip} />
-                                <TR label="method" value={request.method} />
+                                {/* <TR label="ip" value={request.ip} /> */}
+                                {/* <TR label="method" value={request.method} /> */}
                                 <TR label="status" value={request.status} />
-                                <TR label="model" value={request.model} />
-                                <TR
+                                <TR label="provider" value={request.model} />
+                                {/* <TR
                                   label="cost"
                                   value={currencyFormat(request.cost, "USD", 6)}
-                                />
-                                <TR
+                                /> */}
+                                {/* <TR
                                   label="prompt tokens"
                                   value={numberFormat(request.prompt_tokens)}
-                                />
-                                <TR
+                                /> */}
+                                {/* <TR
                                   label="completion tokens"
                                   value={numberFormat(
                                     request.completion_tokens
                                   )}
-                                />
+                                /> */}
 
-                                <TR
+                                {/* <TR
                                   label="cached"
                                   value={request.cached ? "true" : "false"}
-                                />
-                                <TR
+                                /> */}
+                                {/* <TR
                                   label="streamed"
                                   value={request.streamed ? "true" : "false"}
-                                />
+                                /> */}
                                 <TR
                                   label="user id"
                                   value={truncateEmail(request.user_id)}
@@ -241,28 +241,14 @@ const RequestDialog = ({
                               {tab === "pretty" && (
                                 <div className="space-y-4">
                                   <h3 className="text-lg font-medium leading-6 text-gray-900">
-                                    Prompt
+                                    Message
                                   </h3>
                                   <div className="p-4 text-sm whitespace-pre-wrap border border-gray-200 rounded-lg bg-gray-50">
-                                    {new URL(request.url).pathname ===
-                                      "/v1/completions" && (
-                                      <RenderMarkdown>
-                                        {request.request_body.prompt}
-                                      </RenderMarkdown>
-                                    )}
-                                    {new URL(request.url).pathname ===
-                                      "/v1/chat/completions" && (
-                                      <RenderMarkdown>
-                                        {request.request_body.messages
-                                          .map(
-                                            (message: any) =>
-                                              `${message.content}`
-                                          )
-                                          .join("\n")}
-                                      </RenderMarkdown>
-                                    )}
+                                    <RenderMarkdown>
+                                      {request.request_body}
+                                    </RenderMarkdown>
                                   </div>
-                                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                                  {/* <h3 className="text-lg font-medium leading-6 text-gray-900">
                                     Completion
                                   </h3>
                                   <div className="p-4 text-sm border border-gray-200 rounded-lg bg-gray-50">
@@ -289,14 +275,14 @@ const RequestDialog = ({
                                           {request.completion}
                                         </RenderMarkdown>
                                       )}
-                                  </div>
+                                  </div> */}
                                 </div>
                               )}
 
                               {tab === "raw" && (
                                 <div className="space-y-4">
                                   <h3 className="text-lg font-medium leading-6 text-gray-900">
-                                    Request
+                                    Message
                                   </h3>
                                   <pre className="p-4 overflow-auto text-sm whitespace-pre-wrap bg-gray-100 rounded-lg">
                                     <code>
@@ -307,7 +293,7 @@ const RequestDialog = ({
                                       )}
                                     </code>
                                   </pre>
-                                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                                  {/* <h3 className="text-lg font-medium leading-6 text-gray-900">
                                     Response
                                   </h3>
                                   <pre className="p-4 overflow-auto text-sm whitespace-pre-wrap bg-gray-100 rounded-lg">
@@ -328,7 +314,7 @@ const RequestDialog = ({
                                         </RenderMarkdown>
                                       )}
                                     </code>
-                                  </pre>
+                                  </pre> */}
                                 </div>
                               )}
                             </div>
@@ -354,7 +340,7 @@ const columns: ColumnDef<Request>[] = [
   // },
 
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     // header: "Time",
     header: ({ column }) => {
       return (
@@ -370,7 +356,7 @@ const columns: ColumnDef<Request>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = row.getValue("createdAt") as string;
+      const date = row.getValue("created_at") as string;
       return <div>{format(new Date(date), "MMM dd, p")}</div>;
       // ")}</div>;
     },
@@ -390,76 +376,77 @@ const columns: ColumnDef<Request>[] = [
   },
   {
     accessorKey: "model",
-    header: "Model",
+    header: "Provider",
   },
-  {
-    accessorKey: "cost",
-    header: "Cost",
-    cell: ({ row }) => {
-      const value = row.getValue("cost") as number;
-      return <div>{currencyFormat(value, "USD", 4)}</div>;
-    },
-  },
-  {
-    accessorKey: "cached",
-    header: "Cached",
-    cell: ({ row }) => {
-      const value = (row.getValue("cached") ? "✅" : "❌") as string;
-      return <div>{value}</div>;
-    },
-  },
-  {
-    accessorKey: "streamed",
-    header: "Streamed",
-    cell: ({ row }) => {
-      const value = (row.getValue("streamed") ? "✅" : "❌") as string;
-      return <div>{value}</div>;
-    },
-  },
-  {
-    accessorKey: "request_headers",
-    header: "Metadata",
-    cell: ({ row, cell }) => {
-      const value = row.getValue("request_headers") as any;
-      // filter out non- x-metadata- headers
-      const metadata = Object.entries(value)
-        .filter(([key, _]) => key.startsWith("x-metadata"))
-        .map(([key, value], i) => (
-          <Badge key={i} variant="outline">
-            {key.replace("x-metadata-", "")}:{value as string}
-          </Badge>
-        ));
+  // {
+  //   accessorKey: "cost",
+  //   header: "Cost",
+  //   cell: ({ row }) => {
+  //     const value = row.getValue("cost") as number;
+  //     return <div>{currencyFormat(value, "USD", 4)}</div>;
+  //   },
+  // },
+  // {
+  //   accessorKey: "cached",
+  //   header: "Cached",
+  //   cell: ({ row }) => {
+  //     const value = (row.getValue("cached") ? "✅" : "❌") as string;
+  //     return <div>{value}</div>;
+  //   },
+  // },
+  // {
+  //   accessorKey: "streamed",
+  //   header: "Streamed",
+  //   cell: ({ row }) => {
+  //     const value = (row.getValue("streamed") ? "✅" : "❌") as string;
+  //     return <div>{value}</div>;
+  //   },
+  // },
+  // {
+  //   accessorKey: "request_headers",
+  //   header: "Metadata",
+  //   cell: ({ row, cell }) => {
+  //     const value = row.getValue("request_headers") as any;
+  //     // filter out non- x-metadata- headers
+  //     const metadata = Object.entries(value)
+  //       .filter(([key, _]) => key.startsWith("x-metadata"))
+  //       .map(([key, value], i) => (
+  //         <Badge key={i} variant="outline">
+  //           {key.replace("x-metadata-", "")}:{value as string}
+  //         </Badge>
+  //       ));
 
-      return metadata;
-    },
-  },
+  //     return metadata;
+  //   },
+  // },
   {
     accessorKey: "request_body",
-    header: "Prompt",
+    header: "Message",
     cell: ({ row }) => {
       const body = row.getValue("request_body") as any;
       const url = row.getValue("url") as string;
       const path = new URL(url).pathname;
 
-      if (path === "/v1/completions") {
-        return <div>{body.prompt}</div>;
-      } else if (path === "/v1/chat/completions") {
-        return <div>{truncate(body.messages[0].content, 50)}</div>;
-      }
+      return <div>{truncate(body, 50)}</div>;
+      // if (path === "/v1/wuuf/message") {
+      //   return <div>{body.request_body}</div>;
+      // } else if (path === "/v1/chat/completions") {
+      //   return <div>{truncate(body.messages[0].content, 50)}</div>;
+      // }
 
       // const prompt = body.messages
       //   .map((message: any) => `${message.role}: ${message.content}`)
       //   .join("\n");
     },
   },
-  {
-    accessorKey: "completion",
-    header: "Completion",
-    cell: ({ row }) => {
-      const value = row.getValue("completion") as any;
-      return <div>{truncate(value, 50)}</div>;
-    },
-  },
+  // {
+  //   accessorKey: "completion",
+  //   header: "Response",
+  //   cell: ({ row }) => {
+  //     const value = row.getValue("completion") as any;
+  //     return <div>{truncate(value, 50)}</div>;
+  //   },
+  // },
   {
     accessorKey: "user_id",
     header: "User ID",
@@ -525,7 +512,7 @@ const columns: ColumnDef<Request>[] = [
       //   }
       // }
 
-      if (path === "/v1/completions") {
+      if (path === "/v1/wuuf/message") {
         prompt = (row.getValue("request_body") as any)?.prompt;
       } else if (path === "/v1/chat/completions") {
         prompt = (row.getValue("request_body") as any)?.messages
@@ -544,21 +531,21 @@ const columns: ColumnDef<Request>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
                 navigator.clipboard.writeText(prompt);
               }}
             >
               Copy Prompt
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
                 navigator.clipboard.writeText(completion);
               }}
             >
-              Copy Completion
+              Copy Message Text
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={(e) => {
@@ -758,7 +745,7 @@ export function RequestTable({ userId }: { userId?: string }) {
       <div className="flex items-center justify-between space-x-2">
         <div className="flex flex-row space-x-2 items-center justify-center">
           <Input
-            placeholder="Search prompts or completions..."
+            placeholder="Search messages or channels"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="min-w-[250px]"
@@ -778,17 +765,17 @@ export function RequestTable({ userId }: { userId?: string }) {
 
         <div className="flex flex-row space-x-2">
           <DataTableViewOptions table={table} />
-          <RequestExportButton />
+          {/* <RequestExportButton /> */}
         </div>
       </div>
 
       <div className="flex flex-col w-full py-4">
-        <QueryBuilder
+        {/* <QueryBuilder
           fields={metadata}
           defaultQuery={defaultQuery}
           operators={defaultOperators}
           onQueryChange={(q) => setQuery(q)}
-        />
+        /> */}
       </div>
 
       <div className="border rounded-md">

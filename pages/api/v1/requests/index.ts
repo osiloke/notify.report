@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { formatQuery } from "react-querybuilder";
 import { sha256 } from "../keys";
+import worksmart from "@/lib/services/worksmart";
 
 type QueryParameters = {
   user_id?: string;
@@ -133,57 +134,67 @@ export default async function handler(
         }
       : {};
 
-    const requests = await prisma.request.findMany({
-      where: {
-        userId,
-        ...(user_id && { user_id: decodeURIComponent(user_id) }),
-        ...metadataFilter,
-        ...searchFilter,
-      },
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
-      take: Number(pageSize),
-      skip,
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        ip: true,
-        url: true,
-        method: true,
-        status: true,
-        cached: true,
-        streamed: true,
-        // metadata: true,
-        user_id: true,
-        completion: true,
-        model: true,
-        openai_id: true,
-        cost: true,
+    // const requests = await prisma.request.findMany({
+    //   where: {
+    //     userId,
+    //     ...(user_id && { user_id: decodeURIComponent(user_id) }),
+    //     ...metadataFilter,
+    //     ...searchFilter,
+    //   },
+    //   orderBy: {
+    //     [sortBy]: sortOrder,
+    //   },
+    //   take: Number(pageSize),
+    //   skip,
+    //   select: {
+    //     id: true,
+    //     createdAt: true,
+    //     updatedAt: true,
+    //     ip: true,
+    //     url: true,
+    //     method: true,
+    //     status: true,
+    //     cached: true,
+    //     streamed: true,
+    //     // metadata: true,
+    //     user_id: true,
+    //     completion: true,
+    //     model: true,
+    //     openai_id: true,
+    //     cost: true,
 
-        prompt_tokens: true,
-        completion_tokens: true,
+    //     prompt_tokens: true,
+    //     completion_tokens: true,
 
-        request_headers: true,
-        request_body: true,
-        response_body: true,
-        streamed_response_body: true,
-      },
-    });
+    //     request_headers: true,
+    //     request_body: true,
+    //     response_body: true,
+    //     streamed_response_body: true,
+    //   },
+    // });
 
-    const totalCount = await prisma.request.count({
-      where: {
-        userId,
-        ...(user_id && { user_id: user_id }),
-        ...metadataFilter,
-        // ...where,
-        ...searchFilter,
-      },
-    });
+    // const totalCount = await prisma.request.count({
+    //   where: {
+    //     userId,
+    //     ...(user_id && { user_id: user_id }),
+    //     ...metadataFilter,
+    //     // ...where,
+    //     ...searchFilter,
+    //   },
+    // });
 
+    const data = await worksmart.getLogs({ skip, pageSize });
+    const requests = data.data;
+    const totalCount = data.total_count;
     return res.status(200).json({
-      requests,
+      requests: requests.map((v) => ({
+        ...v,
+        url: "https://api.vazapay.com/v1/wuuf/message",
+        completion: v.message?.text ?? "",
+        request_body: v.message?.text ?? "",
+        model: v.channel_provider,
+        request_headers: {},
+      })),
       totalCount,
     });
   } else {

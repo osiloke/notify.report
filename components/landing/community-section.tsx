@@ -8,7 +8,7 @@ export default async function CommunitySection() {
     <section id="community">
       <div className="max-w-screen-xl mx-auto px-4 md:text-center md:px-8 py-20">
         <div className="max-w-xl space-y-3 md:mx-auto">
-          <h3 className="text-orange-600 font-semibold">Community</h3>
+          <h3 className="text-teal-600 font-semibold">Community</h3>
           <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
             Join our community
           </p>

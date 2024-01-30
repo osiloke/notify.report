@@ -15,6 +15,7 @@ import openai, { OpenAI } from "@/lib/services/openai";
 import useLocalStorage from "@/lib/use-local-storage";
 import { cn } from "@/lib/utils";
 import { Badge, Grid } from "@tremor/react";
+import { Key } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 
 const Step = ({ className, ...props }: React.ComponentProps<"h3">) => (
@@ -120,6 +121,8 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
     }
   };
 
+  const handleSubmit = async () => {};
+
   useEffect(() => {
     (async () => {
       const isValid = await openai.isValidKey(key);
@@ -140,7 +143,7 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
           <Card>
             <CardHeader>
               <CardTitle className="flex gap-2 flex-row items-center text-2xl">
-                <span>Connect Your Session Token (~1 minute)</span>
+                <span>Setup your account (~1 minute)</span>
                 <Badge color="blue">✨ Free</Badge>
               </CardTitle>
               <CardDescription className="text-xl">
@@ -162,9 +165,9 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
           <Card>
             <CardHeader className="flex-row gap-4 items-center">
               <CardTitle className="flex gap-2 flex-row items-center">
-                Token:
+                Your first whatsapp manager
               </CardTitle>
-              <Input
+              {/* <Input
                 type="text"
                 name={LOCAL_STORAGE_KEY}
                 onChange={onChange}
@@ -172,17 +175,23 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
                 value={key as string}
                 className="my-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-gray-800 shadow-sm rounded-lg selection:bg-gray-300 focus:bg-white autofill:bg-white"
                 placeholder="sess-5q293fh..."
-              />
+              /> */}
+              <button
+                type="button"
+                className="inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                onClick={handleSubmit}
+              >
+                <Key className="w-4 h-4 mr-2" />
+                Create Whatsapp Instance
+              </button>
             </CardHeader>
           </Card>
 
-          <Card>
-            {/* <CardHeader>
+          {/* <Card>
+            <CardHeader>
               <CardTitle>OpenAI Session Token</CardTitle>
-              <CardDescription>
-               
-              </CardDescription>
-            </CardHeader> */}
+              <CardDescription></CardDescription>
+            </CardHeader>
             <CardHeader className="flex-row gap-4 items-center">
               <OnboardingStep step={1} currentStep={step} />
               <div className="flex flex-col justify-center gap-1.5">
@@ -216,7 +225,7 @@ const OnboardingDashboard = ({ className }: { className?: string }) => {
                 </CardHeader>
               </Card>
             </CardContent>
-          </Card>
+          </Card> */}
         </Grid>
       </div>
     </Suspense>

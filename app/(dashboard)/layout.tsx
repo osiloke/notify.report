@@ -26,7 +26,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
                   className="rounded-full"
                 />
                 <h1 className="text-gray-800 font-semibold text-xl">
-                  LLM Report
+                  Wuuf
                 </h1>
               </Link> 
               <div className="flex-1" />

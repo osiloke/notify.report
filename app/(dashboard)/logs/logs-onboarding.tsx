@@ -142,7 +142,7 @@ const LogsOnboarding = ({
             <CardHeader className="flex-row gap-4 items-center">
               <OnboardingStep step={1} currentStep={step} />
               <div className="flex flex-col justify-center gap-1.5">
-                <CardTitle>Create an LLM Report API Key</CardTitle>
+                <CardTitle>Create an Wuuf API Key</CardTitle>
                 <CardDescription>
                   This key will be used to identify your requests so that you
                   can view your logs in the dashboard.

@@ -82,6 +82,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user }) {
+      // TODO: call worksmarts api to get user info by email
+      // if no user exists create one and fetch first ugk key (use granted key)
       const dbUser = await prisma?.user.findFirst({
         where: {
           email: token.email,
@@ -136,12 +138,12 @@ export const authOptions: NextAuthOptions = {
       // });
 
       if (process.env.NODE_ENV !== "production") return;
-      await axios.post(
-        "https://hooks.slack.com/services/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",
-        {
-          text: `${message.user.email} just signed up! 🎉`,
-        }
-      );
+      // await axios.post(
+      //   "https://hooks.slack.com/services/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",
+      //   {
+      //     text: `${message.user.email} just signed up! 🎉`,
+      //   }
+      // );
     },
   },
 };

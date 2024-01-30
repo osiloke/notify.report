@@ -31,7 +31,7 @@ export default function LogsPage({ code }: { code: any }) {
               <CardHeader>
                 <CardTitle>Logs</CardTitle>
                 <CardDescription>
-                  Analyze your logs and see how your prompts are performing.
+                  Analyze your logs and see how your messages are performing.
                 </CardDescription>
               </CardHeader>
               <CardContent>
