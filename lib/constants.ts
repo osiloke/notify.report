@@ -115,6 +115,11 @@ export const CATEGORY_TO_COLOR: Record<Category, Color> = {
   "Image models": "sky",
   InstructGPT: "lime",
   "GPT base models": "pink",
+  "Vaza Whatsapp": "rose",
+  Telegram: "purple",
+  Email: "indigo",
+  SMS: "amber",
+  Meshtastic: "rose",
 };
 
 export const MODEL_TO_COLOR: Record<Snapshot, Color> = {
