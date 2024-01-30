@@ -8,11 +8,11 @@ import Link from "next/link";
 
 const features = [
   {
-    id: "feature-openai",
-    header: "Analyze",
-    name: "Advanced OpenAI API Dashboard",
+    id: "feature-pricing",
+    header: "Pricing",
+    name: "Transparent Pricing",
     description:
-      "Just enter your OpenAI API key, and we fetch your data from the OpenAI API directly to create a dashboard. No need to install anything.",
+      "Wuuf keeps it simple. Enjoy straightforward pricing that lets you focus on your business, not complex fee structures.",
     icon: Icons.openai,
     // video: "https://cdn.wuuf/openai-demo.mp4",
     cta: "Get Started",
@@ -22,9 +22,9 @@ const features = [
   {
     id: "feature-logs",
     header: "Optimize",
-    name: "Log your prompts and completions",
+    name: "Logs and Reporting",
     description:
-      "Change 1 line in your code and start logging your API requests. Optimize your token usage and start saving money.",
+      "Gain valuable insights into your communication strategy with Wuuf's robust analytics tools. Track message delivery and user engagement to refine and optimize your approach.",
     icon: List,
     // video: "https://cdn.wuuf/logs-demo.mp4",
     cta: "Get Started",
@@ -32,11 +32,11 @@ const features = [
     reverse: true,
   },
   {
-    id: "feature-users",
-    header: "Minimize",
-    name: "Measure Cost Per User",
+    id: "feature-ai",
+    header: "LLM & AI",
+    name: "AI Integration",
     description:
-      "Analyze your cost per user and adjust your pricing to maximize revenue.",
+      "Dive into the AI revolution with Wuuf's cutting-edge tools. Leverage AI to supercharge your automation efforts, making your workflow smarter and more effective.",
     icon: Icons.user,
     // video: "https://cdn.wuuf/users-demo.mp4",
     cta: "Get Started",

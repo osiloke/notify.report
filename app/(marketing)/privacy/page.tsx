@@ -8,8 +8,8 @@ const Privacy = () => {
       </h1>
 
       <p>
-        wuuf operates the https://wuuf website, which provides monitoring and
-        reporting services.
+        Vazapay Limited operates the https://wuuf.vazapay.com website, which
+        provides monitoring and reporting services.
       </p>
 
       <p>
@@ -28,8 +28,8 @@ const Privacy = () => {
 
       <p>
         The terms used in this Privacy Policy have the same meanings as in our
-        Terms and Conditions, which is accessible at https://wuuf, unless
-        otherwise defined in this Privacy Policy.
+        Terms and Conditions, which is accessible at https://wuuf.vazapay.com,
+        unless otherwise defined in this Privacy Policy.
       </p>
 
       <h2>Information Collection and Use</h2>
@@ -137,7 +137,7 @@ const Privacy = () => {
       <p>
         If you have any questions or suggestions about our Privacy Policy, do
         not hesitate to contact us at{" "}
-        <Link href="mailto:dillion@wuuf">dillion@wuuf</Link>.
+        <Link href="mailto:hello@vazapay.com">hello@vazapay.com</Link>.
       </p>
     </div>
   );

@@ -55,26 +55,23 @@ const Hero = () => {
           >
             <span className="text-primary-50 leading-none tracking-tight">
               <span className="bg-gradient-to-r from-teal-600 to-gray-600 bg-clip-text text-transparent">
-                Whatsapp automation for devs
+                Whatsapp automation for developers
               </span>{" "}
               {/* for OpenAI */}
               {/* LLM Ops */}
             </span>
           </m.h1>
           <m.p
-            className="text-gray-500 leading-relaxed text-xl"
+            className="text-gray-500 leading-relaxed text-xl text-center"
             variants={{
               hidden: { opacity: 0, y: -10 },
               show: { opacity: 1, y: 0, transition: { type: "spring" } },
             }}
           >
-            Know exactly what&apos;s happening in your AI app with realtime
-            logging, analytics, usage reports, and alerts.
-            {/* Just enter your OpenAI API key, and we fetch your data from the
-            OpenAI API directly to create a dashboard. No need to install
-            anything. */}
-            {/* End-to-end platform to build, test, monitor and deploy your llm
-            based apps. */}
+            Wuuf is your gateway to simplified and lightning-fast WhatsApp
+            automation. With our user-friendly REST API for WhatsApp, you can
+            effortlessly send and receive messages, automating your interactions
+            with clients and prospects like never before.
           </m.p>
           <m.div
             className="flex md:flex-col items-center justify-center w-[500px]"

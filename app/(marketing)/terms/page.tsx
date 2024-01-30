@@ -8,8 +8,8 @@ const Terms = () => {
       </h1>
 
       <p>
-        wuuf operates the https://wuuf website, which provides monitoring and
-        reporting services.
+        Vazapay Limited operates the https://wuuf.vazapay.com website, which
+        provides automation and reporting services.
       </p>
 
       <h2>Contact Us</h2>
@@ -17,7 +17,7 @@ const Terms = () => {
       <p>
         If you have any questions or suggestions about our Privacy Policy, do
         not hesitate to contact us at{" "}
-        <Link href="mailto:dillion@wuuf">dillion@wuuf</Link>.
+        <Link href="mailto:hello@vazapay.com">hello@vazapay.com</Link>.
       </p>
     </div>
   );
