@@ -20,7 +20,7 @@ import "react-querybuilder/dist/query-builder.css";
 
 export const metadata: Metadata = {
   title: "Wuuf",
-  description: "Logging and Analytics for AI Apps",
+  description: "Messaging automation for developers",
 };
 
 export default async function RootLayout({

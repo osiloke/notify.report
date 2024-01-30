@@ -80,10 +80,10 @@ const FeatureSections = () => {
                 </Link>
               </div>
               <video
-                src={feature.video}
-                autoPlay
-                loop
-                muted
+                // src={feature.video}
+                // autoPlay
+                // loop
+                // muted
                 className="rounded-xl border m-auto lg:col-span-3 shadow-2xl"
               />
             </div>
