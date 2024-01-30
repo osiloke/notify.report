@@ -187,14 +187,16 @@ export default async function handler(
     const requests = data.data;
     const totalCount = data.total_count;
     return res.status(200).json({
-      requests: requests.map((v) => ({
-        ...v,
-        url: "https://api.vazapay.com/v1/wuuf/message",
-        completion: v.message?.text ?? "",
-        request_body: v.message?.text ?? "",
-        model: v.channel_provider,
-        request_headers: {},
-      })),
+      requests: requests.map(
+        (v: { message?: { text: string }; channel_provider: string }) => ({
+          ...v,
+          url: "https://api.vazapay.com/v1/wuuf/message",
+          completion: v.message?.text ?? "",
+          request_body: v.message?.text ?? "",
+          model: v.channel_provider,
+          request_headers: {},
+        })
+      ),
       totalCount,
     });
   } else {
