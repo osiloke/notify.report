@@ -1,5 +1,6 @@
 "use client";
 
+import { Instance } from "@/lib/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { Button, Callout, Card, Metric, Text } from "@tremor/react";
 import { CheckCircleIcon } from "lucide-react";
@@ -7,7 +8,7 @@ import { Fragment, useState } from "react";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
-const ChannelDialog = ({ channels }) => {
+const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -15,7 +16,7 @@ const ChannelDialog = ({ channels }) => {
 
     setTimeout(() => {
       setName("");
-      setKey("");
+      setInstance(undefined);
     }, 500);
   }
 
@@ -24,7 +25,7 @@ const ChannelDialog = ({ channels }) => {
   }
 
   const [name, setName] = useState<string>();
-  const [instance, setKey] = useState<string>();
+  const [instance, setInstance] = useState<Instance | undefined>();
 
   const handleSubmit = async () => {
     const res = await fetch("/api/v1/channels", {
@@ -38,7 +39,7 @@ const ChannelDialog = ({ channels }) => {
 
     toast.success("Manager created successfully!");
 
-    setKey(json.instance);
+    setInstance(json.instance);
     mutate("/api/v1/channels");
     // closeModal();
   };

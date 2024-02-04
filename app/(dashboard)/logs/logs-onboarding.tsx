@@ -52,7 +52,7 @@ const LogsOnboarding = ({
     isLoading: keysIsLoading,
   } = useSWR("/api/v1/keys", fetcher);
   const [step, setStep] = useState(1);
-  const [key, setKey] = useState<string>();
+  const [key, setKey] = useState<{ key: string } | undefined>();
   let [activeTab, setActiveTab] = useState(tabs[0].id);
   const [plan, setPlan] = useState("free");
   const [copied, setCopied] = useState(false);

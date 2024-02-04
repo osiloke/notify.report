@@ -1,10 +1,10 @@
 export interface Instance {
+  id: string;
   domain: string;
   subdomain: string;
   login_url: string;
 
   password: string;
-  id: string;
   user_id: string;
 
   name: string;
