@@ -20,20 +20,20 @@ export default async function handler(
   }
 
   if (req.method === "GET") {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-      include: {
-        subscriptions: true,
-        payments: true,
-      },
-    });
+    // const user = await prisma.user.findUnique({
+    //   where: {
+    //     id: session.user.id,
+    //   },
+    //   include: {
+    //     subscriptions: true,
+    //     payments: true,
+    //   },
+    // });
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found." });
-    }
+    // if (!user) {
+    //   return res.status(404).json({ error: "User not found." });
+    // }
 
-    res.status(200).json({ user });
+    res.status(200).json({ user: { ...session.user, subscriptions: [] } });
   }
 }

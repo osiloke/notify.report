@@ -18,156 +18,107 @@ curl https://api.vazapay.com/v1/wuuf/logs \\
 
 const JSLogs = `
 \`\`\`js
-fetch("https://api.openai.com/v1/chat/completions", { // [!code --]
-fetch("https://api.openai.withlogging.com/v1/chat/completions", { // [!code ++]
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: \`Bearer \${process.env.OPENAI_API_KEY}\`,
-    "X-Api-Key": \`Bearer \${process.env.LLM_REPORT_API_KEY}\`, // [!code ++]
-  },
-  body: JSON.stringify({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: "Hello world" }],
-  }),
-})
+import requests
+
+url = "https://api.vazapay.com/v1/wuuf/log"
+
+response = requests.request("GET", url)
+
+print(response.text)
 \`\`\`
 `;
 
 const NodejsLogs = `
 
 \`\`\`js
-import { Configuration, OpenAIApi } from "openai";
+import requests
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, 
-  basePath: "https://api.openai.com/v1",  // [!code --]
-  basePath: "https://api.openai.withlogging.com/v1",  // [!code ++]
-  baseOptions: { // [!code ++:5]
-    headers: {
-      "X-Api-Key": \`Bearer \${process.env.LLM_REPORT_API_KEY}\`, 
-    },
-  }
-});
+url = "https://api.vazapay.com/v1/wuuf/log"
 
-const openai = new OpenAIApi(configuration);
+response = requests.request("GET", url)
 
-const completion = await openai.createChatCompletion({
-  model: "gpt-3.5-turbo",
-  messages: [
-    { role: "system", content: "You are a helpful assistant." },
-    { role: "user", content: "Hello world" },
-  ],
-});
+print(response.text)
 \`\`\`
 `;
 
 const PythonLogs = `
 \`\`\`python
-import os
-import openai
+import requests
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.api_base = "https://api.openai.com/v1"  // [!code --]
-openai.api_base = "https://api.openai.withlogging.com/v1"  // [!code ++]
+url = "https://api.vazapay.com/v1/wuuf/log"
 
-completion = openai.ChatCompletion.create(
-  model="gpt-3.5-turbo",
-  messages=[
-    {"role": "user", "content": "Hello!"}
-  ],
-  headers={
-    "X-Api-Key": "Bearer " + os.getenv("LLM_REPORT_API_KEY"), // [!code ++]
-  }
-)
+response = requests.request("GET", url)
 
-print(completion.choices[0].message)
+print(response.text)
 \`\`\`
 `;
 
-const CurlUser = `
+const CurlSendMessage = `
 \`\`\`bash
-curl https://api.openai.com/v1/chat/completions // [!code --] \\
-curl https://api.openai.withlogging.com/v1/chat/completions // [!code ++] \\
-  -H "Content-Type: application/json" \\
-  -H "Authorization: Bearer $OPENAI_API_KEY" \\
-  -H "X-Api-Key: Bearer $LLM_REPORT_API_KEY" // [!code ++] \\
-  -H "X-User-Id: myuser@example.com" // [!code ++] \\
-  -d '{
-    "model": "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": "Hello!"}]
-  }'
+curl --request POST \
+  --url https://api.vazapay.com/v1/wuuf/message \\ \n \
+  --header 'Content-Type: application/json' \\ \n \
+  --header 'z-api-key: $WUUF_API_KEY' \\ \n \
+  --data '{ 
+    "text": "wuuf wuuf 🐶", 
+    "to": { 
+      "whatsapp": "2347000000000" 
+    }
+}'
 `;
 
-const JSUser = `
+const JSSendMessage = `
 \`\`\`js
-fetch("https://api.openai.com/v1/chat/completions", { // [!code --]
-fetch("https://api.openai.withlogging.com/v1/chat/completions", { // [!code ++]
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: \`Bearer \${process.env.OPENAI_API_KEY}\`,
-    "X-Api-Key": \`Bearer \${process.env.LLM_REPORT_API_KEY}\`, // [!code ++]
-    "X-User-Id": \`myuser@example.com\`, // [!code ++]
-  },
-  body: JSON.stringify({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: "Hello world" }],
-  }),
-})
+const options = {
+  method: 'POST',
+  headers: {'z-api-key': '\${process.env.WUUF_API_KEY}', 'Content-Type': 'application/json'},
+  body: '{"text":"wuuf wuuf 🐶", "to":{"whatsapp":"2347000000000"}}'
+};
+
+fetch('https://api.vazapay.com/v1/wuuf/message', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
 \`\`\`
 `;
 
-const NodejsUser = `
+const NodejsSendMessage = `
 
 \`\`\`js
-import { Configuration, OpenAIApi } from "openai";
+const options = {
+  method: 'POST',
+  headers: {'z-api-key': '\${process.env.WUUF_API_KEY}', 'Content-Type': 'application/json'},
+  body: '{"text":"wuuf wuuf 🐶", "to":{"whatsapp":"2347000000000"}}'
+};
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, 
-  basePath: "https://api.openai.com/v1",  // [!code --]
-  basePath: "https://api.openai.withlogging.com/v1",  // [!code ++]
-  baseOptions: { // [!code ++:5]
-    headers: {
-      "X-Api-Key": \`Bearer \${process.env.LLM_REPORT_API_KEY}\`, 
-      "X-User-Id": \`myuser@example.com\`, 
-    },
-  }
-});
-
-const openai = new OpenAIApi(configuration);
-
-const completion = await openai.createChatCompletion({
-  model: "gpt-3.5-turbo",
-  messages: [
-    { role: "system", content: "You are a helpful assistant." },
-    { role: "user", content: "Hello world" },
-  ],
-});
+fetch('https://api.vazapay.com/v1/wuuf/message', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
 \`\`\`
 `;
 
-const PythonUser = `
+const PythonSendMessage = `
 \`\`\`python
-import os
-import openai
+import requests
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.api_base = "https://api.openai.com/v1"  // [!code --]
-openai.api_base = "https://api.openai.withlogging.com/v1"  // [!code ++]
+url = "https://api.vazapay.com/v1/wuuf/message"
 
-completion = openai.ChatCompletion.create(
-  model="gpt-3.5-turbo",
-  messages=[
-    {"role": "user", "content": "Hello!"}
-  ],
-  headers={
-    "X-Api-Key": "Bearer " + os.getenv("LLM_REPORT_API_KEY"), // [!code ++]
-    "X-User-Id": "myuser@example.com", // [!code ++]
-  }
-)
+payload = {
+    "text": "wuuf wuuf 🐶",
+    "to": {
+        "whatsapp": "2347000000000"
+    }
+}
 
-print(completion.choices[0].message)
+headers = {
+    "z-api-key": WUUF_API_KEY,
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, json=payload, headers=headers)
+
+print(response.text)
 \`\`\`
 `;
 
@@ -238,13 +189,13 @@ async function getMarkdownItInstance(): Promise<MarkdownIt> {
   return markdownItInstance;
 }
 
-export async function getUsersCode(): Promise<CodeResults> {
+export async function sendMessageCode(): Promise<CodeResults> {
   const renderer = await getMarkdownItInstance();
   return {
-    curl: renderer.render(CurlUser),
-    js: renderer.render(JSUser),
-    nodejs: renderer.render(NodejsUser),
-    python: renderer.render(PythonUser),
+    curl: renderer.render(CurlSendMessage),
+    js: renderer.render(JSSendMessage),
+    nodejs: renderer.render(NodejsSendMessage),
+    python: renderer.render(PythonSendMessage),
   };
 }
 
@@ -255,5 +206,15 @@ export async function getLogsCode(): Promise<CodeResults> {
     js: renderer.render(JSLogs),
     nodejs: renderer.render(NodejsLogs),
     python: renderer.render(PythonLogs),
+  };
+}
+
+export async function getSendCode(): Promise<CodeResults> {
+  const renderer = await getMarkdownItInstance();
+  return {
+    curl: renderer.render(CurlSendMessage),
+    js: renderer.render(JSSendMessage),
+    nodejs: renderer.render(NodejsSendMessage),
+    python: renderer.render(PythonSendMessage),
   };
 }

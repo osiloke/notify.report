@@ -1,5 +1,6 @@
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import worksmart from "@/lib/services/worksmart";
 import { endOfDay, startOfDay } from "date-fns";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -58,15 +59,19 @@ export default async function handler(
         }
       }
 
-      const count = await prisma.request.count({
-        where: {
-          userId: session.user.id,
-          ...dateFilter,
-        },
+      // const count = await prisma.request.count({
+      //   where: {
+      //     userId: session.user.id,
+      //     ...dateFilter,
+      //   },
+      // });
+      const resp = await worksmart.getLogs(session.user.id, {
+        skip: 0,
+        pageSize: 0,
       });
 
       return res.status(200).json({
-        count,
+        count: resp.total_count,
       });
     } catch (error: any) {
       console.log(error);

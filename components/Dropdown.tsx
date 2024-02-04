@@ -67,7 +67,7 @@ export function UserDropdownMenu() {
               <span>Billing</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="/settings/team">
+          {/* <Link href="/settings/team">
             <DropdownMenuItem className="cursor-pointer">
               <UserPlus className="mr-2 h-4 w-4" />
               <span>Invite Team</span>
@@ -78,7 +78,7 @@ export function UserDropdownMenu() {
               <Icons.openai className="mr-2 h-4 w-4" />
               <span>OpenAI Settings</span>
             </DropdownMenuItem>
-          </Link>
+          </Link> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -95,7 +95,7 @@ export function UserDropdownMenu() {
               <span>Ask a question</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="https://docs.wuuf" target="_blank">
+          <Link href="https://zaap.mintlify.app" target="_blank">
             <DropdownMenuItem className="cursor-pointer">
               <Book className="mr-2 h-4 w-4" />
               <span>Documentation</span>
@@ -104,10 +104,7 @@ export function UserDropdownMenu() {
               </DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          <Link
-            href="https://github.com/dillionverma/wuuf/issues"
-            target="_blank"
-          >
+          <Link href="https://github.com/vazapay/wuuf/issues" target="_blank">
             <DropdownMenuItem className="cursor-pointer">
               <Icons.gitHub className="mr-2 h-4 w-4" />
               <span>Submit Feedback</span>
@@ -117,7 +114,7 @@ export function UserDropdownMenu() {
             </DropdownMenuItem>
           </Link>
 
-          <Link href="https://discord.gg/eVtDPmRWXm" target="_blank">
+          {/* <Link href="https://discord.gg/eVtDPmRWXm" target="_blank">
             <DropdownMenuItem className="cursor-pointer">
               <DiscordLogoIcon className="mr-2 h-4 w-4" />
               <span>Discord</span>
@@ -125,7 +122,7 @@ export function UserDropdownMenu() {
                 <ExternalLink className="h-4 w-4" />
               </DropdownMenuShortcut>
             </DropdownMenuItem>
-          </Link>
+          </Link> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">

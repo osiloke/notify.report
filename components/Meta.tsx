@@ -3,9 +3,9 @@ import Head from "next/head";
 const DOMAIN = "https://wuuf";
 
 const Meta = ({
-  title = "Wuuf | OpenAI API Analytics",
-  description = "Analyze your OpenAI API usage and billing in real-time.",
-  image = `${DOMAIN}/screenshot.png`,
+  title = "Wuuf | Whatsapp automation for developers",
+  description = "Whatsapp automation for developers.",
+  image = `${DOMAIN}/screenshot2.png`,
   type = "website",
 }: {
   title?: string;

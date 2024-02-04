@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useUser } from "@/lib/hooks/user/useUser";
 import { cn, fetcher } from "@/lib/utils";
-import { Badge, Grid, TextInput, Title } from "@tremor/react";
+import { Badge, Grid, NumberInput, TextInput, Title } from "@tremor/react";
 import { m } from "framer-motion";
 import { Check, Copy, Key, Send } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
@@ -27,7 +28,7 @@ let tabs = [
   { id: "python", label: "python" },
 ];
 
-interface OnboardingProps {
+interface ChannelDemoProps {
   code: {
     curl: string;
     js: string;
@@ -39,24 +40,24 @@ interface OnboardingProps {
   user_id?: boolean;
 }
 
-const LogsOnboarding = ({
+const ChannelDemo = ({
   code,
   className,
   onRefresh = () => {},
   user_id = false,
-}: OnboardingProps) => {
-  const { user, isLoading, subscribed } = useUser();
+}: ChannelDemoProps) => {
   const {
     data: keys,
     error: keysError,
     isLoading: keysIsLoading,
   } = useSWR("/api/v1/keys", fetcher);
+  const { user, isLoading, subscribed } = useUser();
   const [step, setStep] = useState(1);
-  const [key, setKey] = useState<string>();
+  const [key, setKey] = useState<{ key: string }>();
+  const [startStep, setStartStep] = useState(1);
   let [activeTab, setActiveTab] = useState(tabs[0].id);
-  const [plan, setPlan] = useState("free");
+  const [phone, setPhone] = useState("");
   const [copied, setCopied] = useState(false);
-  const [phone, setPhone] = useState("***");
 
   useEffect(() => {
     if (copied) {
@@ -66,91 +67,66 @@ const LogsOnboarding = ({
     }
   }, [copied]);
 
-  // useEffect(() => {
-
   useEffect(() => {
     if (keys?.keys.length > 0) {
       setKey(keys.keys[0]);
       setStep(2);
     }
   }, [keys]);
-  //   if (step === 2 && subscribed) setStep(3);
-  // }, [step, subscribed]);
-
   if (!user) return null;
+
+  if (keysIsLoading && keys?.length == 0) return null;
 
   const handleSubmit = async () => {
     const res = await fetch("/api/v1/keys", {
       method: "POST",
-      body: JSON.stringify({ name: "onboarding" }),
+      body: JSON.stringify({ name: "ChannelDemo" }),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const json = await res.json();
     console.log(json);
+    if (json.error) {
+    } else {
+      toast.success("API Key created successfully!");
 
-    toast.success("Key generated successfully!");
+      setStep(2);
 
-    setStep(2);
+      setKey(json.key);
 
-    setKey(json.key);
-
-    mutate("/api/v1/keys");
+      mutate("/api/v1/keys");
+    }
   };
 
-  const handleLog = async () => {
+  const sendMessage = async () => {
     const res = await fetch("/api/v1/requests/send-demo", {
       method: "POST",
-      body: JSON.stringify({
-        ...(user_id && { user_id: "myuser@example.com" }),
-      }),
+      body: JSON.stringify({ phone, key: key?.key }),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const json = await res.json();
-    console.log(json);
 
-    toast.success("Message sent successfully!");
+    if (json.error) {
+      toast.error(json.error);
+    } else {
+      toast.success("First Message sent successfully!");
 
-    setStep(3);
-    onRefresh();
+      setStep(3);
+      onRefresh();
+    }
+  };
+
+  const setPhoneNumber = (e: any) => {
+    setPhone(e.target.value);
   };
 
   return (
     <Suspense>
-      <div className={cn("flex flex-col w-full max-w-xl space-y-4", className)}>
+      <div className={cn("flex flex-col w-full space-y-4", className)}>
         <Grid numItems={1} className="gap-4 w-full">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex gap-2 flex-row items-center">
-                <span>Logs</span>
-                <Badge color="blue">✨ Free</Badge>
-              </CardTitle>
-
-              <CardDescription>( ~ 1 minute installation )</CardDescription>
-              {/* <CardDescription>
-                Building an AI product is hard. You probably wrote your prompt
-                template once and then never changed it hoping for the best 😅.
-                You also may not know how many times your AI model hallucinates,
-                fails, or gives your users a terrible and unrelated answer.
-              </CardDescription> */}
-              <CardDescription className="font-semibold">
-                Setup a whatsapp manager and wuuf api key to start automating
-                messages
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {/* <video
-                src="https://cdn.wuuf/openai-demo.mp4"
-                autoPlay
-                loop
-                muted
-                className="rounded-xl border"
-              /> */}
-            </CardContent>
-          </Card>
           <Card>
             <CardHeader className="flex-row gap-4 items-center">
               <OnboardingStep step={1} currentStep={step} />
@@ -214,6 +190,14 @@ const LogsOnboarding = ({
               </div>
             </CardHeader>
             <CardContent>
+              <div className="py-4">
+                <Label>Phone number</Label>
+                <NumberInput
+                  enableStepper={false}
+                  placeholder="2340000000000"
+                  onChange={setPhoneNumber}
+                />
+              </div>
               <div className="mt-2">
                 {tabs.map((tab) => (
                   <button
@@ -286,18 +270,10 @@ const LogsOnboarding = ({
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleLog}>
+              <Button onClick={sendMessage}>
                 <Send className="w-4 h-4 mr-2" />
-                Send Request
+                Send Message
               </Button>
-              {/* <button
-                type="button"
-                className="inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                onClick={handleLog}
-              >
-                <Send className="w-4 h-4 mr-2" />
-                Send Request
-              </button> */}
             </CardFooter>
           </Card>
         </Grid>
@@ -306,4 +282,4 @@ const LogsOnboarding = ({
   );
 };
 
-export default LogsOnboarding;
+export default ChannelDemo;

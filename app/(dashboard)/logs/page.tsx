@@ -1,7 +1,7 @@
 import LogsPage from "@/app/(dashboard)/logs/logs-page";
-import { getLogsCode } from "@/lib/markdown-code";
+import { getSendCode } from "@/lib/markdown-code";
 
 export default async function Logs() {
-  const code = await getLogsCode();
+  const code = await getSendCode();
   return <LogsPage code={code} />;
 }

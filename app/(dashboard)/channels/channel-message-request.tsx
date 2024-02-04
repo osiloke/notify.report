@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/lib/hooks/user/useUser";
-import { cn, fetcher } from "@/lib/utils";
-import { Badge, Grid, TextInput, Title } from "@tremor/react";
+import { cn } from "@/lib/utils";
+import { Badge, Grid, Title } from "@tremor/react";
 import { m } from "framer-motion";
 import { Check, Copy, Key, Send } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 
 let tabs = [
   { id: "curl", label: "curl" },
@@ -27,7 +27,7 @@ let tabs = [
   { id: "python", label: "python" },
 ];
 
-interface OnboardingProps {
+interface ChannelMessageRequestProps {
   code: {
     curl: string;
     js: string;
@@ -39,24 +39,18 @@ interface OnboardingProps {
   user_id?: boolean;
 }
 
-const LogsOnboarding = ({
+const ChannelMessageRequest = ({
   code,
   className,
   onRefresh = () => {},
   user_id = false,
-}: OnboardingProps) => {
+}: ChannelMessageRequestProps) => {
   const { user, isLoading, subscribed } = useUser();
-  const {
-    data: keys,
-    error: keysError,
-    isLoading: keysIsLoading,
-  } = useSWR("/api/v1/keys", fetcher);
   const [step, setStep] = useState(1);
   const [key, setKey] = useState<string>();
   let [activeTab, setActiveTab] = useState(tabs[0].id);
   const [plan, setPlan] = useState("free");
   const [copied, setCopied] = useState(false);
-  const [phone, setPhone] = useState("***");
 
   useEffect(() => {
     if (copied) {
@@ -67,20 +61,13 @@ const LogsOnboarding = ({
   }, [copied]);
 
   // useEffect(() => {
-
-  useEffect(() => {
-    if (keys?.keys.length > 0) {
-      setKey(keys.keys[0]);
-      setStep(2);
-    }
-  }, [keys]);
   //   if (step === 2 && subscribed) setStep(3);
   // }, [step, subscribed]);
 
   if (!user) return null;
 
   const handleSubmit = async () => {
-    const res = await fetch("/api/v1/keys", {
+    const res = await fetch("/api/v1/channel//message", {
       method: "POST",
       body: JSON.stringify({ name: "onboarding" }),
       headers: {
@@ -90,13 +77,13 @@ const LogsOnboarding = ({
     const json = await res.json();
     console.log(json);
 
-    toast.success("Key generated successfully!");
+    toast.success("Message sent successfully!");
 
     setStep(2);
 
     setKey(json.key);
 
-    mutate("/api/v1/keys");
+    // mutate("/api/v1/keys");
   };
 
   const handleLog = async () => {
@@ -112,7 +99,7 @@ const LogsOnboarding = ({
     const json = await res.json();
     console.log(json);
 
-    toast.success("Message sent successfully!");
+    toast.success("First Message sent successfully!");
 
     setStep(3);
     onRefresh();
@@ -164,11 +151,10 @@ const LogsOnboarding = ({
             </CardHeader>
             {key && (
               <CardContent>
-                <TextInput
-                  type="password"
+                <Input
+                  type="text"
                   name="name"
-                  value={key.key}
-                  onChange={() => {}}
+                  value={key}
                   className="w-full px-2 py-1 text-gray-500 bg-transparent outline-none border shadow-sm rounded-lg"
                 />
               </CardContent>
@@ -185,7 +171,7 @@ const LogsOnboarding = ({
                 <Button
                   className="gap-2"
                   onClick={() => {
-                    navigator.clipboard.writeText(key.key);
+                    navigator.clipboard.writeText(key);
                     toast.success("Copied to clipboard!");
                     setCopied(true);
                   }}
@@ -251,35 +237,25 @@ const LogsOnboarding = ({
                   dangerouslySetInnerHTML={{
                     __html:
                       activeTab === "curl"
-                        ? code.curl
-                            .replace(
-                              "$WUUF_API_KEY",
-                              key?.key || "$WUUF_API_KEY"
-                            )
-                            .replace("2347000000000", phone || "***")
+                        ? code.curl.replace(
+                            "$WUUF_API_KEY",
+                            key || "$WUUF_API_KEY"
+                          )
                         : activeTab === "js"
-                        ? code.js
-                            .replace(
-                              "${process.env.WUUF_API_KEY}",
-                              key?.key || "${process.env.WUUF_API_KEY}"
-                            )
-                            .replace("2347000000000", phone || "***")
+                        ? code.js.replace(
+                            "${process.env.WUUF_API_KEY}",
+                            key || "process.eprocess.env.WUUF_API_KEY"
+                          )
                         : activeTab === "nodejs"
-                        ? code.nodejs
-                            .replace(
-                              "${process.env.WUUF_API_KEY}",
-                              key?.key || "${process.env.WUUF_API_KEY}"
-                            )
-                            .replace("2347000000000", phone || "***")
+                        ? code.nodejs.replace(
+                            "${process.env.WUUF_API_KEY}",
+                            key || "process.env.WUUF_API_KEY"
+                          )
                         : activeTab === "python"
-                        ? code.python
-                            .replace(
-                              "WUUF_API_KEY",
-                              key?.key
-                                ? `'${key?.key}'`
-                                : 'os.getenv("WUUF_API_KEY")'
-                            )
-                            .replace("2347000000000", phone || "***")
+                        ? code.python.replace(
+                            'os.getenv("WUUF_API_KEY")',
+                            key || 'os.getenv("WUUF_API_KEY")'
+                          )
                         : "",
                   }}
                 />
@@ -306,4 +282,4 @@ const LogsOnboarding = ({
   );
 };
 
-export default LogsOnboarding;
+export default ChannelMessageRequest;

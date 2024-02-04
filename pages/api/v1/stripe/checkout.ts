@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getURL } from "@/lib/utils";
 import { getServerSession } from "next-auth";
+import worksmart from "@/lib/services/worksmart";
 
 export const createOrRetrieveCustomer = async ({
   email,
@@ -16,11 +17,13 @@ export const createOrRetrieveCustomer = async ({
   uuid: string;
 }) => {
   console.log("Fetching user", uuid);
-  const user = await prisma.user.findUnique({
-    where: {
-      id: uuid,
-    },
-  });
+  // const user = await prisma.user.findUnique({
+  //   where: {
+  //     id: uuid,
+  //   },
+  // });
+
+  const user = await worksmart.getUser(email!);
 
   console.log("User: ", user);
 

@@ -164,9 +164,9 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       if (!key || !orgId) return;
-      OpenAI.setOrg(orgId);
-      const u = await openai.getUsers();
-      setUsers(u);
+      // OpenAI.setOrg(orgId);
+      // const u = await openai.getUsers();
+      // setUsers(u);
     })();
   }, [key, orgId]);
 

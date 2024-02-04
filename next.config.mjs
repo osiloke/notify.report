@@ -20,22 +20,17 @@ const nextConfig = {
     return [
       {
         source: "/docs",
-        destination: "https://docs.llm.report",
-        permanent: true,
-      },
-      {
-        source: "/discord",
-        destination: "https://discord.gg/eVtDPmRWXm",
+        destination: "https:/zapd.vazapay.com",
         permanent: true,
       },
       {
         source: "/star",
-        destination: "https://github.com/dillionverma/llm.report",
+        destination: "https://github.com/vazapay/wuuf",
         permanent: true,
       },
       {
         source: "/github",
-        destination: "https://github.com/dillionverma/llm.report",
+        destination: "https://github.com/vazapay/wuuf",
         permanent: true,
       },
     ];

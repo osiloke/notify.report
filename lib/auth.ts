@@ -1,6 +1,7 @@
 import { env } from "@/env.mjs";
 import prisma from "@/lib/prisma";
 import { sendVerificationRequest } from "@/lib/resend/emails/sendVerificationRequest";
+import { createOrRetrieveCustomer } from "@/pages/api/v1/stripe/checkout";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
@@ -9,6 +10,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import worksmart from "./services/worksmart";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma as PrismaClient),
@@ -55,15 +57,13 @@ export const authOptions: NextAuthOptions = {
               req
             ) {
               if (credentials === undefined) return null;
-              const existingUser = await prisma?.user.findUnique({
-                where: { email: credentials.email.toLowerCase() },
-              });
+
+              const existingUser = await worksmart.signin(
+                credentials.email.toLocaleLowerCase(),
+                credentials.password
+              );
 
               if (!existingUser) return null;
-
-              const isValid = credentials.password === existingUser.password;
-
-              if (!isValid) return null;
 
               return existingUser;
             },
@@ -75,33 +75,32 @@ export const authOptions: NextAuthOptions = {
     async session({ token, session }) {
       if (token) {
         session.user.id = token.id;
-        session.user.name = token.name;
+        // session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
       }
       return session;
     },
     async jwt({ token, user }) {
-      // TODO: call worksmarts api to get user info by email
-      // if no user exists create one and fetch first ugk key (use granted key)
-      const dbUser = await prisma?.user.findFirst({
-        where: {
-          email: token.email,
-        },
-      });
-
-      if (!dbUser) {
-        if (user) {
-          token.id = user?.id;
+      const email = token?.email ?? "_";
+      let dbUser: {
+        id: string;
+        Email?: string;
+        name?: string;
+        avatar?: { url?: string };
+      } = { id: token.id };
+      if (email != "_") {
+        dbUser = await worksmart.getUser(email);
+        if (!dbUser) {
+          dbUser = await worksmart.createUser(email, "", user.id);
         }
-        return token;
       }
 
       return {
         id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        picture: dbUser.image,
+        name: dbUser?.name ?? user?.name,
+        email: dbUser?.Email ?? user?.email,
+        picture: dbUser?.avatar?.url ?? user?.image ?? token?.picture,
       };
     },
   },
@@ -119,22 +118,26 @@ export const authOptions: NextAuthOptions = {
             (a: any, b: any) => b.primary - a.primary
           )[0].email;
 
-          const updatedUser = await prisma?.user.upsert({
-            where: { id: user.id },
-            update: {
-              email: profile.email,
-            },
-            create: {
-              email: profile.email,
-            },
-          });
+          if (profile.email) {
+            const existingUser = await worksmart.getUser(profile.email);
+            if (existingUser == null) {
+              await worksmart.createUser(
+                profile.email,
+                account!.provider,
+                user.id
+              );
+            }
+          }
         }
       }
+    },
+    updateUser: async (message) => {
+      const existingUser = await worksmart.getUser(message.user.email || "_");
     },
     createUser: async (message) => {
       // await createOrRetrieveCustomer({
       //   uuid: message.user.id as string,
-      //   email: message.user.email || "",
+      //   email: message.user.email || "_",
       // });
 
       if (process.env.NODE_ENV !== "production") return;

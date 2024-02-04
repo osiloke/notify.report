@@ -15,11 +15,25 @@ export default async function handler(
   }
 
   if (req.method === "POST") {
-    const body = req.body;
-    return res.status(401).json({ error: "not implemented" });
+    const { name } = req.body;
+    const instance = await worksmart.createInstance(
+      session.user.id,
+      name,
+      "whatsapp"
+    );
+    return res.status(200).json({ instance });
   } else if (req.method === "GET") {
-    const channels = await worksmart.getChannels();
-    return res.status(200).json(channels);
+    const channels = await worksmart.getInstances(session.user.id);
+    return res.status(200).json(
+      channels.map(({ name, status, user_id, phone, created_at, id }) => ({
+        id,
+        name,
+        status,
+        user_id,
+        phone,
+        created_at,
+      }))
+    );
   } else {
     return res.status(405).json({ error: "Method not allowed" });
   }

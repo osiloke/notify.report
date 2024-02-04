@@ -42,15 +42,15 @@ const HOME_LINKS = [
     badge: null,
   },
   {
-    text: "Logs",
-    Icon: () => <ArrowUpDown className="h-4 w-4" />,
-    href: "/logs",
+    text: "Whatsapp",
+    Icon: () => <Icons.whatsapp className="h-4 w-4" />,
+    href: "/channels",
     badge: null,
   },
   {
-    text: "Channels",
-    Icon: () => <BellRing className="h-4 w-4" />,
-    href: "/channels",
+    text: "Logs",
+    Icon: () => <ArrowUpDown className="h-4 w-4" />,
+    href: "/logs",
     badge: null,
   },
   // {
@@ -62,7 +62,7 @@ const HOME_LINKS = [
   {
     text: "API Keys",
     Icon: () => <Key className="h-4 w-4" />,
-    href: "/install",
+    href: "/api-keys",
     badge: null,
   },
   {

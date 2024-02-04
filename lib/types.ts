@@ -1,3 +1,19 @@
+export interface Instance {
+  domain: string;
+  subdomain: string;
+  login_url: string;
+
+  password: string;
+  id: string;
+  user_id: string;
+
+  name: string;
+  status: string;
+
+  created_at: string;
+
+  phone: string;
+}
 export interface BillingSubscriptionResponse {
   object: "billing_subscription";
   has_payment_method: boolean;

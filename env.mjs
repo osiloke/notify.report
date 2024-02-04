@@ -25,8 +25,9 @@ export const env = createEnv({
     RESEND_FROM_NAME: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
 
-    WORKSMART_API_URL: z.string().optional(),
-    WORKSMART_AUTH_TOKEN: z.string().optional(),
+    WORKSMART_API_URL: z.string(),
+    WORKSMART_API_KEY: z.string(),
+    WORKSMART_AUTH_TOKEN: z.string(),
     WORKSMART_GROUP: z.string().optional(),
   },
   client: {
@@ -35,8 +36,10 @@ export const env = createEnv({
       .transform((s) => s !== "false" && s !== "0"),
     NEXT_PUBLIC_POSTHOG_API_KEY: z.string().optional(),
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+    NEXT_PUBLIC_REALTIME_URL: z.string(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_RESEND_ENABLED: process.env.NEXT_PUBLIC_RESEND_ENABLED,
+    NEXT_PUBLIC_REALTIME_URL: process.env.NEXT_PUBLIC_REALTIME_URL,
   },
 });

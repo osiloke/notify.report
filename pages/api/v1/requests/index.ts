@@ -183,7 +183,7 @@ export default async function handler(
     //   },
     // });
 
-    const data = await worksmart.getLogs({ skip, pageSize });
+    const data = await worksmart.getLogs(session!.user.id, { skip, pageSize });
     const requests = data.data;
     const totalCount = data.total_count;
     return res.status(200).json({

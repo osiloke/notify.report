@@ -175,7 +175,7 @@ const Pricing = () => {
     console.log("BB");
 
     if (plan === "Enterprise") {
-      window.open("https://cal.com/dillionverma/llm-report-demo", "_blank");
+      window.open("https://cal.com/vazapay/wuuf", "_blank");
     } else {
       const params = new URLSearchParams({
         client_reference_id: user.id,

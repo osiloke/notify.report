@@ -1,5 +1,6 @@
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import worksmart from "@/lib/services/worksmart";
 import { createHash, randomBytes } from "crypto";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -34,41 +35,19 @@ export default async function handler(
   const { name } = req.body;
 
   if (req.method === "POST") {
-    const key = generateKey(32);
-    const hashedKey = await sha256(key);
-    const sensitizedKey = sensitizeKey(key, 8);
-
-    const k = await prisma.apiKey.create({
-      data: {
-        name: name || "",
-        sensitive_id: sensitizedKey,
-        hashed_key: hashedKey,
-        user: {
-          connect: {
-            id: session.user.id,
-          },
-        },
-      },
-    });
-
+    const key = await worksmart.createApiKey(session.user.id);
     return res.status(200).json({ key });
   } else if (req.method === "GET") {
-    const keys = await prisma.apiKey.findMany({
-      where: {
-        user: {
-          id: session.user.id,
-        },
-      },
+    const keys = await worksmart.getApiKey(session.user.id);
+    return res.status(200).json({
+      keys: keys.map(({ access_key, created_at, id }) => ({
+        name: "Default",
+        key: access_key,
+        sensitive_id: "Default",
+        created_at,
+        id,
+      })),
     });
-
-    const keysResponse = keys.map((key: any) => {
-      return {
-        ...key,
-        hashed_key: undefined,
-      };
-    });
-
-    return res.status(200).json({ keys: keysResponse });
   } else {
     return res.status(405).json({ error: "Method not allowed" });
   }

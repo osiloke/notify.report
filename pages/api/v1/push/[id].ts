@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { env } from "@/env.mjs";
+import worksmart from "@/lib/services/worksmart";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,30 +15,13 @@ export default async function handler(
     return res.status(401).json({ error: "You must be logged in." });
   }
 
-  if (req.method === "DELETE") {
+  if (req.method === "PUT") {
     const { id } = req.query;
-
-    const key = await prisma.apiKey.findUnique({
-      where: {
-        id: id as string,
-      },
-    });
-
-    if (!key) {
-      return res.status(404).json({ error: "Key not found" });
-    }
-
-    if (key.userId !== session.user.id) {
-      return res.status(401).json({ error: "You do not own this key" });
-    }
-
-    await prisma.apiKey.delete({
-      where: {
-        id: id as string,
-      },
-    });
-
-    return res.status(200).json({ key });
+    const push = await worksmart.createPushPrivateChannel(
+      id as string,
+      req.body
+    );
+    return res.status(200).json({ token: push.channels[0].token });
   } else {
     return res.status(405).json({ error: "Method not allowed" });
   }

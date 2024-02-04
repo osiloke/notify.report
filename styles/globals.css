@@ -41,8 +41,11 @@ body::-webkit-scrollbar-thumb:hover {
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
+    /* --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%; */
+
+    --primary: 86 39% 70%;
+    --primary-foreground: 266 15% 18%;
 
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
