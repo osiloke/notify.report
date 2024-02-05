@@ -1,10 +1,10 @@
 {
-  "name": "llm-report",
+  "name": "wuuf",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "npm run copy && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier \"**/*.{css,js,json,jsx,ts,tsx}\"",
@@ -25,7 +25,8 @@
     "db:reset:dev": "yarn db:drop:dev && yarn db:migrate:dev",
     "db:migrate:prod": "dotenv -e .env.production -- npx prisma db push",
     "db:drop:prod": "dotenv -e .env.production -- npx prisma migrate reset",
-    "db:reset:prod": "yarn db:drop:prod && yarn db:migrate:prod"
+    "db:reset:prod": "yarn db:drop:prod && yarn db:migrate:prod",
+    "copy": "mkdir -p lib/shiki && cp -r node_modules/shiki/{dist,languages,samples,themes} lib/shiki/"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.5",

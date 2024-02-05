@@ -39,6 +39,9 @@ const nextConfig = {
     domains: ["avatars.githubusercontent.com", "lh3.googleusercontent.com"],
   },
   transpilePackages: ["react-tweet"],
+  experimental: {
+    serverComponentsExternalPackages: ["shiki"],
+  },
 };
 
 export default million.next(nextConfig, millionConfig);
