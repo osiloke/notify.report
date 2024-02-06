@@ -94,7 +94,7 @@ const LinkItem = ({ text, href, Icon, badge, external, isActive }: any) => (
         }}
         variants={{
           hover: {
-            rotate: [0, 20, 0],
+            // rotate: [0, 20, 0],
             transition: {
               ease: ["easeOut"],
             },
@@ -120,6 +120,8 @@ const Drawer = () => {
 
   const [activeTab, setActiveTab] = useState("");
 
+  const [showDrawer, setShowDrawer] = useState(false);
+
   const pathname = usePathname();
 
   useEffect(() => {
@@ -143,61 +145,92 @@ const Drawer = () => {
         isActive={activeTab === navItem.href.replace("/", "")}
       />
     ));
-
+  // https://gist.github.com/Kasun002/82e7183e084242584b73d5014704e249
   return (
-    <aside className="flex-col flex-shrink-0 w-64 h-screen transition-transform -translate-x-full lg:translate-x-0 border-r border-b justify-between hidden lg:flex px-4 pt-4">
-      <div className="flex flex-col gap-2">
-        <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/logo.svg"
-            alt="Logo"
-            width={32}
-            height={32}
-            className="rounded-full"
+    <>
+      <button
+        id="toggleSidebar"
+        className="lg:hidden fixed top-4 right-4 z-30 bg-white p-2 rounded-md shadow-md"
+        onClick={() => setShowDrawer(!showDrawer)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
           />
-          <h1 className="text-gray-800 font-semibold text-xl">Wuuf</h1>
-        </Link>
-        <h2 className="mb-2 text-lg font-semibold tracking-tight">Home</h2>
-        {renderLinks(HOME_LINKS)}
-        {/* <h2 className="mb-2 text-lg font-semibold tracking-tight">Community</h2>
+        </svg>
+      </button>
+      <aside
+        className={cn(
+          "bg-white z-20 fixed lg:relative top-0 left-0 flex-col w-64 lg:w-72 h-screen transition-transform lg:translate-x-0 border-r border-b justify-between lg:flex px-4 pt-4",
+          {
+            "-translate-x-full": showDrawer,
+          }
+        )}
+      >
+        <div className="flex flex-col gap-2">
+          <Link href="/" className="flex items-center space-x-2">
+            <Image
+              src="/logo.svg"
+              alt="Logo"
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+            <h1 className="text-gray-800 font-semibold text-xl">Wuuf</h1>
+          </Link>
+          <h2 className="mb-2 text-lg font-semibold tracking-tight">Home</h2>
+          {renderLinks(HOME_LINKS)}
+          {/* <h2 className="mb-2 text-lg font-semibold tracking-tight">Community</h2>
         {renderLinks(COMMUNITY_LINKS)} */}
-      </div>
-      <div className="flex flex-1" />
-      <Card className="p-2">
-        <CardHeader className="p-2">
-          <CardTitle>Free plan</CardTitle>
-          <CardDescription>
-            {logCount} / {numberFormat(LOGS_PER_MONTH)}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-2 flex flex-col gap-2">
-          <div>
-            <Progress value={(logCount / LOGS_PER_MONTH) * 100} />
-            {/* <Progress
+        </div>
+        <div className="flex flex-1" />
+        <Card className="p-2">
+          <CardHeader className="p-2">
+            <CardTitle>Free plan</CardTitle>
+            <CardDescription>
+              {logCount} / {numberFormat(LOGS_PER_MONTH)}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-2 flex flex-col gap-2">
+            <div>
+              <Progress value={(logCount / LOGS_PER_MONTH) * 100} />
+              {/* <Progress
               className="absolute green-300"
               value={(projectedLogs / LOGS_PER_MONTH) * 100}
             /> */}
-          </div>
-          <div className="text-xs">
-            {numberFormat(logsLeft)} messages left this month
-          </div>
-          <div className="text-xs">~{nFormatter(projectedLogs)} projected</div>
-        </CardContent>
-        <CardFooter className="p-2">
-          <Button
-            onClick={() => router.push("/settings/billing")}
-            className="group relative justify-center gap-2 w-full transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
-          >
-            <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 transform bg-white opacity-10 transition-all duration-1000 ease-out group-hover:-translate-x-60"></span>
+            </div>
+            <div className="text-xs">
+              {numberFormat(logsLeft)} messages left this month
+            </div>
+            <div className="text-xs">
+              ~{nFormatter(projectedLogs)} projected
+            </div>
+          </CardContent>
+          <CardFooter className="p-2">
+            <Button
+              onClick={() => router.push("/settings/billing")}
+              className="group relative justify-center gap-2 w-full transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+            >
+              <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 transform bg-white opacity-10 transition-all duration-1000 ease-out group-hover:-translate-x-60"></span>
 
-            <BoltIcon className="h-4 w-4" />
-            <span>Upgrade to pro</span>
-          </Button>
-        </CardFooter>
-      </Card>
+              <BoltIcon className="h-4 w-4" />
+              <span>Upgrade to pro</span>
+            </Button>
+          </CardFooter>
+        </Card>
 
-      {session?.user && <UserDropdownMenu />}
-    </aside>
+        {session?.user && <UserDropdownMenu />}
+      </aside>
+    </>
   );
 };
 
