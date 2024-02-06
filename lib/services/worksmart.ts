@@ -326,6 +326,7 @@ export class Worksmart {
 
       return res.data;
     } catch (err) {
+      console.error(JSON.stringify((err as AxiosError).response));
       throw err; // Re-throw the error to reject the Promise
     }
   }
