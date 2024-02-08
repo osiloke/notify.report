@@ -17,7 +17,6 @@ const DeleteDialog = ({ id, hashed }: { id: string; hashed: string }) => {
   }
 
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session } = useSession();
 
   const handleSubmit = async () => {
     const res = await fetch(`/api/v1/keys/${id}`, {

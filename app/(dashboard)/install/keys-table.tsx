@@ -50,7 +50,7 @@ export default function KeysTable() {
             </tbody>
           </table>
         )}
-        <KeyDialog />
+        <KeyDialog keys={keys} />
       </div>
     </Card>
   );

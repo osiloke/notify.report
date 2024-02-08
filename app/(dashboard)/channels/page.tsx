@@ -1,14 +1,12 @@
 import ChannelsTable from "@/app/(dashboard)/channels/channels-table";
 import { Flex, Text, Title } from "@tremor/react";
 import { Suspense } from "react";
-import ChannelDemo from "./channel-demo";
 import { getSendCode } from "@/lib/markdown-code";
 
 export default async function Install() {
   const code = await getSendCode();
   return (
     <div className="max-w-4xl space-y-4">
-      <ChannelDemo code={code} />
       <Flex className="xl:flex-row flex-col items-start xl:items-center space-y-4">
         <div className="space-y-2">
           <div className="flex flex-row space-x-3">
@@ -20,10 +18,9 @@ export default async function Install() {
           </Text>
         </div>
       </Flex>
-
       <Suspense fallback={<></>}>
         <>
-          <ChannelsTable />
+          <ChannelsTable code={code} />
         </>
       </Suspense>
     </div>

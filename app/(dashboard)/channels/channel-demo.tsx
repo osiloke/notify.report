@@ -14,12 +14,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/lib/hooks/user/useUser";
 import { cn, fetcher } from "@/lib/utils";
-import { Badge, Grid, NumberInput, TextInput, Title } from "@tremor/react";
+import {
+  Badge,
+  Flex,
+  Grid,
+  NumberInput,
+  Text,
+  TextInput,
+  Title,
+} from "@tremor/react";
 import { m } from "framer-motion";
 import { Check, Copy, Key, Send } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR, { mutate } from "swr";
+import ChannelDialog from "./channel-dialog";
+import RegisterPhoneDialog from "./register-phone-dialog";
+import ChannelStarter from "./channel-starter";
+import { RocketIcon } from "@radix-ui/react-icons";
+import { Icons } from "@/components/icons";
 
 let tabs = [
   { id: "curl", label: "curl" },
@@ -28,6 +41,14 @@ let tabs = [
   { id: "python", label: "python" },
 ];
 
+interface Channel {
+  id: string;
+
+  name: string;
+  phone: string;
+  status: string;
+}
+
 interface ChannelDemoProps {
   code: {
     curl: string;
@@ -35,6 +56,7 @@ interface ChannelDemoProps {
     nodejs: string;
     python: string;
   };
+  channels: Channel[];
   onRefresh?: () => void;
   className?: string;
   user_id?: boolean;
@@ -42,6 +64,7 @@ interface ChannelDemoProps {
 
 const ChannelDemo = ({
   code,
+  channels,
   className,
   onRefresh = () => {},
   user_id = false,
@@ -54,10 +77,11 @@ const ChannelDemo = ({
   const { user, isLoading, subscribed } = useUser();
   const [step, setStep] = useState(1);
   const [key, setKey] = useState<{ key: string }>();
-  const [startStep, setStartStep] = useState(1);
   let [activeTab, setActiveTab] = useState(tabs[0].id);
   const [phone, setPhone] = useState("");
   const [copied, setCopied] = useState(false);
+  const [channel, setChannel] = useState<Channel>();
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (copied) {
@@ -68,11 +92,24 @@ const ChannelDemo = ({
   }, [copied]);
 
   useEffect(() => {
-    if (keys?.keys.length > 0) {
+    if (keys?.keys?.length > 0) {
       setKey(keys.keys[0]);
+    }
+    if (channels.length == 0) {
+      setStep(1);
+    } else if (channels.length > 0 && keys?.keys.length > 0) {
+      setStep(3);
+    } else if (channels.length > 0) {
       setStep(2);
     }
-  }, [keys]);
+  }, [channels, keys]);
+
+  useEffect(() => {
+    if (channels.length > 0) {
+      setChannel(channels[0]);
+    }
+  }, [channels]);
+
   if (!user) return null;
 
   if (keysIsLoading && keys?.length == 0) return null;
@@ -86,12 +123,12 @@ const ChannelDemo = ({
       },
     });
     const json = await res.json();
-    console.log(json);
+
     if (json.error) {
     } else {
       toast.success("API Key created successfully!");
 
-      setStep(2);
+      setStep(3);
 
       setKey(json.key);
 
@@ -100,6 +137,7 @@ const ChannelDemo = ({
   };
 
   const sendMessage = async () => {
+    setSending(true);
     const res = await fetch("/api/v1/requests/send-demo", {
       method: "POST",
       body: JSON.stringify({ phone, key: key?.key }),
@@ -108,13 +146,13 @@ const ChannelDemo = ({
       },
     });
     const json = await res.json();
-
+    setSending(false);
     if (json.error) {
       toast.error(json.error);
     } else {
       toast.success("First Message sent successfully!");
 
-      setStep(3);
+      setStep(4);
       onRefresh();
     }
   };
@@ -123,6 +161,8 @@ const ChannelDemo = ({
     setPhone(e.target.value);
   };
 
+  const channelReady = channel?.phone.length && channel?.status == "running";
+
   return (
     <Suspense>
       <div className={cn("flex flex-col w-full space-y-4", className)}>
@@ -130,6 +170,41 @@ const ChannelDemo = ({
           <Card>
             <CardHeader className="flex-row gap-4 items-center">
               <OnboardingStep step={1} currentStep={step} />
+              <div className="flex flex-col justify-center gap-1.5">
+                <CardTitle>Create a whatsapp manager</CardTitle>
+                <CardDescription>
+                  A manager automates sending and receiving on a single whatsapp
+                  phone number.
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="space-x-4">
+              {channel?.status != "running" && (
+                <ChannelStarter channel={channel ?? {}} />
+              )}
+
+              {channel?.status == "running" && channel?.phone.length === 0 && (
+                <RegisterPhoneDialog id={channel?.id ?? ""} channel={channel} />
+              )}
+
+              {channelReady == true && (
+                <Flex justifyContent="start" className="gap-4">
+                  <RocketIcon className="h-4 w-4" />
+                  <Text>Your whatsapp manager is ready !</Text>
+                </Flex>
+              )}
+            </CardContent>
+            <CardFooter>
+              {channels.length === 0 && <ChannelDialog channels={[]} />}
+            </CardFooter>
+          </Card>
+          <Card
+            className={cn("", {
+              "opacity-50 pointer-events-none": !channelReady || !key,
+            })}
+          >
+            <CardHeader className="flex-row gap-4 items-center">
+              <OnboardingStep step={2} currentStep={step} />
               <div className="flex flex-col justify-center gap-1.5">
                 <CardTitle>Create a wuuf API key</CardTitle>
                 <CardDescription>
@@ -176,11 +251,11 @@ const ChannelDemo = ({
 
           <Card
             className={cn("", {
-              "opacity-50 pointer-events-none": !key,
+              "opacity-50 pointer-events-none": !channelReady || !key,
             })}
           >
             <CardHeader className="flex-row gap-4 items-center">
-              <OnboardingStep step={2} currentStep={step} />
+              <OnboardingStep step={3} currentStep={step} />
               <div className="flex flex-col justify-center gap-1.5">
                 <Title>Send your first message</Title>
                 <CardDescription>
@@ -270,8 +345,12 @@ const ChannelDemo = ({
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={sendMessage}>
-                <Send className="w-4 h-4 mr-2" />
+              <Button onClick={sendMessage} disabled={sending}>
+                {sending ? (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4 mr-2" />
+                )}
                 Send Message
               </Button>
             </CardFooter>

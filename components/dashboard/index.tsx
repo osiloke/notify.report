@@ -212,7 +212,7 @@ export default function Dashboard() {
                     </span>
                   )}
                 >
-                  comming soon
+                  Busy crunching!
                 </Badge>
               )}
 

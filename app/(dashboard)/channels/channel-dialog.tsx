@@ -4,7 +4,7 @@ import { Instance } from "@/lib/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { Button, Callout, Card, Metric, Text } from "@tremor/react";
 import { CheckCircleIcon } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
@@ -24,10 +24,15 @@ const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
     setIsOpen(true);
   }
 
+  const fetchRef = useRef(false);
+  const [busy, setBusy] = useState(false);
   const [name, setName] = useState<string>();
   const [instance, setInstance] = useState<Instance | undefined>();
 
   const handleSubmit = async () => {
+    if (fetchRef.current) return;
+    fetchRef.current = true;
+    setBusy(true);
     const res = await fetch("/api/v1/channels", {
       method: "POST",
       body: JSON.stringify({ name }),
@@ -36,7 +41,8 @@ const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
       },
     });
     const json = await res.json();
-
+    setBusy(false);
+    fetchRef.current = false;
     toast.success("Manager created successfully!");
 
     setInstance(json.instance);
@@ -51,7 +57,7 @@ const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
   return (
     <>
       {channels?.length == 0 && (
-        <Button type="button" onClick={openModal}>
+        <Button type="button" onClick={openModal} disabled={busy}>
           Create a manager
         </Button>
       )}
@@ -89,7 +95,7 @@ const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
                     {!instance ? "Create a manager" : "Your instance"}
                   </Dialog.Title>
 
-                  {!instance ? (
+                  {!instance && (
                     <>
                       <div className="mt-2">
                         <label
@@ -99,6 +105,7 @@ const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
                           Name
                         </label>
                         <input
+                          disabled={busy}
                           type="text"
                           name="name"
                           value={name}
@@ -110,15 +117,17 @@ const ChannelDialog = ({ channels }: { channels: Instance[] }) => {
 
                       <div className="mt-4">
                         <button
+                          disabled={busy}
                           type="button"
                           className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                           onClick={handleSubmit}
                         >
-                          Create
+                          Create a manager
                         </button>
                       </div>
                     </>
-                  ) : (
+                  )}
+                  {instance && (
                     <>
                       <div className="mt-2">
                         <label
