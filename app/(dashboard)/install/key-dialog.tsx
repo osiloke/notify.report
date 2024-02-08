@@ -6,7 +6,7 @@ import { Fragment, useState } from "react";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
-const KeyDialog = () => {
+const KeyDialog = ({ keys }: { keys?: any[] }) => {
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -49,9 +49,11 @@ const KeyDialog = () => {
 
   return (
     <>
-      <Button type="button" onClick={openModal}>
-        Create
-      </Button>
+      {keys?.length === 0 && (
+        <Button type="button" onClick={openModal}>
+          Create
+        </Button>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -127,6 +129,7 @@ const KeyDialog = () => {
                         </label>
                         <div className="flex items-center">
                           <input
+                            title="name"
                             type="text"
                             name="name"
                             value={key}

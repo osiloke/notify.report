@@ -16,7 +16,7 @@ const Docs = ({ code }: { code: any }) => {
 
   const [key, setKey] = useState<string>();
   let [activeTab, setActiveTab] = useState(tabs[0].id);
-
+  const phone = "2347000000000";
   return (
     <Card>
       <Flex justifyContent="start" className="gap-4 mb-2">
@@ -60,25 +60,30 @@ const Docs = ({ code }: { code: any }) => {
           dangerouslySetInnerHTML={{
             __html:
               activeTab === "curl"
-                ? code.curl.replace(
-                    "$LLM_REPORT_API_KEY",
-                    key || "$LLM_REPORT_API_KEY"
-                  )
+                ? code.curl
+                    .replace("$WUUF_API_KEY", key || "$WUUF_API_KEY")
+                    .replace("2347000000000", phone || "***")
                 : activeTab === "js"
-                ? code.js.replace(
-                    "${process.env.LLM_REPORT_API_KEY}",
-                    key || "process.e"
-                  )
+                ? code.js
+                    .replace(
+                      "${process.env.WUUF_API_KEY}",
+                      key || "${process.env.WUUF_API_KEY}"
+                    )
+                    .replace("2347000000000", phone || "***")
                 : activeTab === "nodejs"
-                ? code.nodejs.replace(
-                    "${process.env.LLM_REPORT_API_KEY}",
-                    key || "process.e"
-                  )
+                ? code.nodejs
+                    .replace(
+                      "${process.env.WUUF_API_KEY}",
+                      key || "${process.env.WUUF_API_KEY}"
+                    )
+                    .replace("2347000000000", phone || "***")
                 : activeTab === "python"
-                ? code.python.replace(
-                    'os.getenv("OPENAI_API_KEY")',
-                    key || 'os.getenv("OPENAI_API_KEY")'
-                  )
+                ? code.python
+                    .replace(
+                      "WUUF_API_KEY",
+                      key ? `'${key}'` : 'os.getenv("WUUF_API_KEY")'
+                    )
+                    .replace("2347000000000", phone || "***")
                 : "",
           }}
         />

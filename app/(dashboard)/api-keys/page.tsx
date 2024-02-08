@@ -1,11 +1,11 @@
 import Docs from "@/app/(dashboard)/install/docs";
 import KeysTable from "@/app/(dashboard)/install/keys-table";
-import { sendMessageCode } from "@/lib/markdown-code";
+import { getSendCode } from "@/lib/markdown-code";
 import { Flex, Text, Title } from "@tremor/react";
 import { Suspense } from "react";
 
-export default async function Install() {
-  const code = await sendMessageCode();
+export default async function ApiKeys() {
+  const code = await getSendCode();
 
   return (
     <div className="max-w-4xl space-y-4">

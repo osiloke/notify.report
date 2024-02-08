@@ -81,6 +81,7 @@ const ChannelDemo = ({
   const [phone, setPhone] = useState("");
   const [copied, setCopied] = useState(false);
   const [channel, setChannel] = useState<Channel>();
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (copied) {
@@ -134,8 +135,6 @@ const ChannelDemo = ({
       mutate("/api/v1/keys");
     }
   };
-
-  const [sending, setSending] = useState(false);
 
   const sendMessage = async () => {
     setSending(true);
