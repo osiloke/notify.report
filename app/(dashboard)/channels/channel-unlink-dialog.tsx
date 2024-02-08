@@ -17,7 +17,7 @@ const ChannelUnlinkDialog = ({
     id?: string;
     status?: string;
     name?: string;
-    phon?: string;
+    phone?: string;
   };
 }) => {
   function closeModal() {
