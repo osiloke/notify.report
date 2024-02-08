@@ -12,10 +12,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { siteConfig } from "@/config/site";
 import { useLogCount } from "@/lib/hooks/useLogCount";
 import { cn, nFormatter, numberFormat } from "@/lib/utils";
 import { BoltIcon } from "@heroicons/react/24/solid";
-import { Badge } from "@tremor/react";
+import { Badge, Flex } from "@tremor/react";
 import { getDaysInMonth } from "date-fns";
 import { motion } from "framer-motion";
 import {
@@ -150,7 +151,8 @@ const Drawer = () => {
     <>
       <button
         id="toggleSidebar"
-        className="lg:hidden fixed top-4 right-4 z-30 bg-white p-2 rounded-md shadow-md"
+        title="toggle"
+        className="lg:hidden fixed top-4 right-4 z-40 bg-white p-2 rounded-md shadow-md"
         onClick={() => setShowDrawer(!showDrawer)}
       >
         <svg
@@ -161,9 +163,9 @@ const Drawer = () => {
           stroke="currentColor"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M4 6h16M4 12h16M4 18h16"
           />
         </svg>
@@ -177,15 +179,17 @@ const Drawer = () => {
         )}
       >
         <div className="flex flex-col gap-2">
-          <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="/logo.svg"
-              alt="Logo"
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-            <h1 className="text-gray-800 font-semibold text-xl">Wuuf</h1>
+          <Link href="/" className="mr-6 flex items-center gap-2">
+            <Icons.logo className="h-10 w-10 fill-primary text-primary" />
+            <Flex flexDirection="col" alignItems="start">
+              <span className="hidden font-bold sm:inline-block">
+                {siteConfig.name}
+              </span>
+              <span className="hidden sm:inline-block text-[8px]">
+                from vazapay
+              </span>
+            </Flex>
+            {/* <Badge variant="secondary">Beta</Badge> */}
           </Link>
           <h2 className="mb-2 text-lg font-semibold tracking-tight">Home</h2>
           {renderLinks(HOME_LINKS)}

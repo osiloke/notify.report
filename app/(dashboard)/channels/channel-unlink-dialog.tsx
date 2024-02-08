@@ -3,20 +3,21 @@
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Dialog, Transition } from "@headlessui/react";
-import { StopIcon } from "@radix-ui/react-icons";
-import { StopCircle, TrashIcon } from "lucide-react";
+import { LinkBreak2Icon } from "@radix-ui/react-icons";
+import { TrashIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Fragment, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
-const ChannelStopDialog = ({
+const ChannelUnlinkDialog = ({
   channel,
 }: {
   channel: {
     id?: string;
     status?: string;
     name?: string;
+    phon?: string;
   };
 }) => {
   function closeModal() {
@@ -36,18 +37,19 @@ const ChannelStopDialog = ({
     if (fetchRef.current) return;
     fetchRef.current = true;
     setBusy(true);
-    const resp = await fetch(`/api/v1/channels/${channel.id}/discard`, {
+    const resp = await fetch(`/api/v1/channels/${channel.id}/logout`, {
       method: "GET",
     });
     if (!resp.ok) {
-      setBusy(false);
       fetchRef.current = false;
+    } else {
+      mutate("/api/v1/channels");
+      setIsOpen(false);
     }
-    mutate("/api/v1/channels");
-    setIsOpen(false);
+    setBusy(false);
   };
   const isBusy =
-    (channel.status ?? "") in ["stoping", "stopping"] ||
+    (channel.status ?? "") in ["discarding", "stopping", "creating"] ||
     fetchRef.current === true;
 
   return (
@@ -56,14 +58,14 @@ const ChannelStopDialog = ({
         disabled={isBusy}
         onClick={openModal}
         variant="outline"
-        className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+        className="py-2 leading-none px-3 font-medium duration-150 hover:bg-gray-50 rounded-lg"
       >
         {isBusy ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <StopCircle className="w-4 h-4" />
+          <LinkBreak2Icon className="w-4 h-4" />
         )}
-        &nbsp; Stop
+        &nbsp; Unlink
       </Button>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -96,7 +98,7 @@ const ChannelStopDialog = ({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Stop manager
+                    Unlink manager
                   </Dialog.Title>
 
                   <>
@@ -105,16 +107,21 @@ const ChannelStopDialog = ({
                         htmlFor="name"
                         className="block text-sm font-medium  mb-1 text-red-600"
                       >
-                        Stopping a manager does not unlink your phone number.
+                        Unlinking a manager will disconnect your manager from
+                        your whatsapp phone number.
                       </label>
                       <br />
-                      <label>Are you sure you want to stop this manager?</label>
+                      <label>
+                        Are you sure you want to unlink your whatsapp phone
+                        number?
+                      </label>
+                      <br />
                       <input
                         type="text"
                         name="name"
-                        value={channel.name}
+                        value={channel?.phone}
                         disabled
-                        placeholder="Whatapp manager"
+                        placeholder="Business manager"
                         className="w-full px-2 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                       />
                     </div>
@@ -129,15 +136,17 @@ const ChannelStopDialog = ({
                         Cancel
                       </button>
                       <button
-                        disabled={isBusy}
                         type="button"
+                        disabled={isBusy}
                         className="text-white bg-red-400 hover:bg-red-500  inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none outline-none "
                         onClick={handleSubmit}
                       >
-                        {isBusy && (
+                        {isBusy ? (
                           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <LinkBreak2Icon className="w-4 h-4" />
                         )}
-                        Stop
+                        Unlink
                       </button>
                     </div>
                   </>
@@ -151,4 +160,4 @@ const ChannelStopDialog = ({
   );
 };
 
-export default ChannelStopDialog;
+export default ChannelUnlinkDialog;

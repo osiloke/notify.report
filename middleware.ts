@@ -12,7 +12,7 @@ export default withAuth(
 
     if (isAuthPage) {
       if (isAuth) {
-        return NextResponse.redirect(new URL("/openai", req.url));
+        return NextResponse.redirect(new URL("/wuuf", req.url));
       }
 
       return null;

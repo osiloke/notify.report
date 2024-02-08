@@ -101,7 +101,8 @@ export class Worksmart {
         }
       );
 
-      return res.data.data;
+      const { Email, id, name } = res.data.data;
+      return { email: Email, id, name };
     } catch (err) {
       return null;
     }
@@ -233,6 +234,25 @@ export class Worksmart {
     }
   }
 
+  async logoutInstance(id: string): Promise<any> {
+    try {
+      const instance = await worksmart.getInstance(id);
+      // return res.status(200).json({ key });
+      const url = `https://${instance.subdomain}.${instance.domain}/app/logout`;
+      const response = await axios.get(url, {
+        auth: {
+          username: instance.id,
+          password: instance.password,
+        },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      const e = error as AxiosError;
+      throw e;
+    }
+  }
   async createInstanceQR(id: string): Promise<any> {
     try {
       const instance = await worksmart.getInstance(id);
@@ -326,6 +346,7 @@ export class Worksmart {
 
       return res.data;
     } catch (err) {
+      console.error(JSON.stringify((err as AxiosError).response));
       throw err; // Re-throw the error to reject the Promise
     }
   }

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { Flex } from "@tremor/react";
 import Link from "next/link";
 import * as React from "react";
 
@@ -88,10 +89,15 @@ export function MainNav() {
   return (
     <div className="mr-4 hidden md:flex">
       <Link href="/" className="mr-6 flex items-center gap-2">
-        <Icons.logo className="h-6 w-6" />
-        <span className="hidden font-bold sm:inline-block">
-          {siteConfig.name}
-        </span>
+        <Icons.logo className="h-6 w-6 fill-primary" />
+        <Flex>
+          <span className="hidden font-bold sm:inline-block">
+            {siteConfig.name}
+          </span>
+          <span className="hidden font-bold sm:inline-block text-sm">
+            by Vazapay
+          </span>
+        </Flex>
         {/* <Badge variant="secondary">Beta</Badge> */}
       </Link>
       <NavigationMenu>

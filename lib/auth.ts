@@ -59,10 +59,9 @@ export const authOptions: NextAuthOptions = {
               if (credentials === undefined) return null;
 
               const existingUser = await worksmart.signin(
-                credentials.email.toLocaleLowerCase(),
+                credentials.email,
                 credentials.password
               );
-
               if (!existingUser) return null;
 
               return existingUser;

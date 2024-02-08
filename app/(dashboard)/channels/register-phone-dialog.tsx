@@ -2,18 +2,18 @@
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import useTimer from "@/lib/hooks/useTimer";
 import { cn } from "@/lib/utils";
 import { Dialog, Transition } from "@headlessui/react";
+import { Link2Icon } from "@radix-ui/react-icons";
 import { Title } from "@radix-ui/react-toast";
-import { Card, Flex } from "@tremor/react";
-import { QrCode, Scan, TrashIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { Fragment, useRef, useState } from "react";
+import { Flex } from "@tremor/react";
+import { RefreshCcwIcon, Scan } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
-const RegisterPhoneDialog = ({ id }: { id: string }) => {
+const RegisterPhoneDialog = ({ channel }: { id: string; channel: any }) => {
   function closeModal() {
     setIsOpen(false);
   }
@@ -22,26 +22,57 @@ const RegisterPhoneDialog = ({ id }: { id: string }) => {
     setIsOpen(true);
   }
 
-  const getQRQueryRef = useRef(false);
-  const [isOpen, setIsOpen] = useState(false);
-
   const [qrCode, setQrCode] = useState<null | {
     qr_link: string;
     qr_duration: number;
   }>(null);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const fetchRef = useRef(false);
+  const [busy, setBusy] = useState(false);
+
+  const [run, setRun] = useState(false);
+  const timerStarted = useRef(false);
+  const timer = useTimer({
+    duration: qrCode?.qr_duration ?? 0,
+    refreshRate: 20,
+    loop: false,
+    onFinish: () => {
+      if (timerStarted.current == true) {
+        timerStarted.current = false;
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (timerStarted.current == true) return;
+    timerStarted.current = true;
+    setRun(true);
+  }, [qrCode]);
+
+  useEffect(() => {
+    if (!run) return;
+    setRun(false);
+    timer.stop();
+    timer.seek(0);
+    timer.start();
+  }, [run, timer]);
+
+  const timeLeft = (qrCode?.qr_duration ?? 0) - Math.round(timer.time);
   const handleSubmit = async () => {
-    if (getQRQueryRef.current) return;
-    getQRQueryRef.current = true;
+    if (fetchRef.current) return;
+    fetchRef.current = true;
+    setBusy(true);
     toast.loading("Creating QR Code");
-    const res = await fetch(`/api/v1/channels/${id}/login`, {
+    const res = await fetch(`/api/v1/channels/${channel.id}/login`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
       },
     });
     toast.dismiss();
-    getQRQueryRef.current = false;
+    fetchRef.current = false;
+    setBusy(false);
     if (res.status != 200) {
       const json = await res.json();
       try {
@@ -62,11 +93,19 @@ const RegisterPhoneDialog = ({ id }: { id: string }) => {
       // setIsOpen(false);
     }
   };
+  const isBusy = channel?.status != "running" || busy;
+  const canRefresh = qrCode === null || (qrCode && timeLeft == 0);
 
   return (
     <>
-      <Button onClick={openModal} variant="outline">
-        <Icons.whatsapp className="w-4 h-4" /> <span>Register phone</span>
+      <Button onClick={openModal} variant="outline" disabled={isBusy}>
+        {isBusy ? (
+          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Link2Icon className="w-4 h-4" />
+        )}
+        &nbsp;
+        <span>Link your whatsapp phone number</span>
       </Button>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -99,7 +138,7 @@ const RegisterPhoneDialog = ({ id }: { id: string }) => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Register phone
+                    Link whatsapp phone number
                   </Dialog.Title>
 
                   <>
@@ -108,34 +147,73 @@ const RegisterPhoneDialog = ({ id }: { id: string }) => {
                         <Flex
                           className="gap-4 md:flex-row flex-col"
                           justifyContent="center"
-                          alignItems="center"
+                          alignItems="start"
                         >
-                          {!qrCode && (
-                            <div className="rounded-lg border-gray-100 border-1 h-48 w-96 bg-gray-100 justify-center flex items-center">
-                              <Scan className="h-32 w-32 text-gray-300" />
+                          <div className="relative w-full lg:w-96 h-64 lg:h-48">
+                            {qrCode && (
+                              <img
+                                alt="qr code"
+                                src={qrCode.qr_link}
+                                className="h-64 lg:h-48 w-full rounded-lg object-contain relative"
+                              />
+                            )}
+                            {!qrCode && (
+                              <div className="rounded-lg border-gray-100 border-1 h-48 w-full bg-gray-100 justify-center flex items-center">
+                                <Scan className="h-32 w-full text-gray-300" />
+                              </div>
+                            )}
+                            <div
+                              className={cn(
+                                "transition=all h-full inset-y-0 absolute z-10 top-0 left-0 right-0 bottom-0 flex justify-center items-center  rounded-lg",
+                                {
+                                  "bg-opacity-60 bg-black": canRefresh,
+                                }
+                              )}
+                            >
+                              {canRefresh && (
+                                <Button
+                                  type="button"
+                                  disabled={isBusy || timeLeft > 0}
+                                  onClick={handleSubmit}
+                                >
+                                  {isBusy && (
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                  )}
+                                  Refresh QR Code
+                                </Button>
+                              )}
                             </div>
-                          )}
-                          {qrCode && (
-                            <img
-                              alt="qr code"
-                              src={qrCode.qr_link}
-                              className="h-48 w-96 rounded-lg object-contain "
-                            />
-                          )}
+                          </div>
                           <div className="w-full h-full flex flex-col items-center justify-center">
                             <div>
                               <Title className="font-bold">
                                 Scan the QR code from your whatsapp device
                               </Title>
                               <br />
-                              <span className="text-sm">
-                                Open Setting {">"} Linked Devices {">"} Link
-                                Device
-                              </span>
+                              <div className="text-sm ml-4">
+                                <ul className="list-decimal space-y-4">
+                                  <li>
+                                    Open WhatsApp on the device with the phone
+                                    number you want to link.
+                                  </li>
+                                  <li>
+                                    Go to the app&apos;s settings and tap
+                                    <b>&quot;Linked Devices.&quot;</b>
+                                  </li>
+                                  <li>
+                                    Select <b>&quot;Link a Device&quot;</b> and
+                                    use your phone&apos;s camera to scan the QR
+                                    code on the other device&apos;s screen
+                                  </li>
+                                </ul>
+                              </div>
                               <br />
                               {qrCode && (
                                 <span className="text-sm">
-                                  Refresh QR Code in {qrCode?.qr_duration}{" "}
+                                  Refresh QR Code in{" "}
+                                  <b className="text-primary transition-all animate-pulse">
+                                    {timeLeft}
+                                  </b>{" "}
                                   seconds to avoid link expiration
                                 </span>
                               )}
@@ -145,17 +223,7 @@ const RegisterPhoneDialog = ({ id }: { id: string }) => {
                       </div>
                     </div>
 
-                    <div className="mt-4 space-x-2 flex justify-between">
-                      <Button
-                        type="button"
-                        disabled={getQRQueryRef.current}
-                        onClick={handleSubmit}
-                      >
-                        {getQRQueryRef.current == true && (
-                          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Refresh QR Code
-                      </Button>
+                    <div className="mt-4 space-x-2 flex justify-end">
                       <button
                         className="
                         bg-gray-100 text-gray-500 hover:text-gray-600
