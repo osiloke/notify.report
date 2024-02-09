@@ -97,7 +97,7 @@ const ChannelDemo = ({
     }
     if (channels.length == 0) {
       setStep(1);
-    } else if (channels.length > 0 && keys?.keys.length > 0) {
+    } else if (channels.length > 0 && keys?.keys?.length > 0) {
       setStep(3);
     } else if (channels.length > 0) {
       setStep(2);
