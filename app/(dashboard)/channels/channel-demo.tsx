@@ -183,9 +183,13 @@ const ChannelDemo = ({
                 <ChannelStarter channel={channel ?? {}} />
               )}
 
-              {channel?.phone?.length === 0 && channel?.status == "running" && (
-                <RegisterPhoneDialog id={channel?.id ?? ""} channel={channel} />
-              )}
+              {(channel?.phone ?? "").length === 0 &&
+                channel?.status == "running" && (
+                  <RegisterPhoneDialog
+                    id={channel?.id ?? ""}
+                    channel={channel}
+                  />
+                )}
 
               {channelReady == true && (
                 <Flex justifyContent="start" className="gap-4">
