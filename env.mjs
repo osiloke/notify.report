@@ -41,5 +41,6 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_RESEND_ENABLED: process.env.NEXT_PUBLIC_RESEND_ENABLED,
     NEXT_PUBLIC_REALTIME_URL: process.env.NEXT_PUBLIC_REALTIME_URL,
+    NEXT_PUBLIC_POSTHOG_API_KEY: process.env.NEXT_PUBLIC_POSTHOG_API_KEY,
   },
 });
