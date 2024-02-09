@@ -161,7 +161,7 @@ const ChannelDemo = ({
     setPhone(e.target.value);
   };
 
-  const channelReady = channel?.phone.length && channel?.status == "running";
+  const channelReady = channel?.phone?.length && channel?.status == "running";
 
   return (
     <Suspense>
