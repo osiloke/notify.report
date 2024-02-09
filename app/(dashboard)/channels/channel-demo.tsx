@@ -183,7 +183,7 @@ const ChannelDemo = ({
                 <ChannelStarter channel={channel ?? {}} />
               )}
 
-              {channel?.status == "running" && channel?.phone.length === 0 && (
+              {channel?.phone?.length === 0 && channel?.status == "running" && (
                 <RegisterPhoneDialog id={channel?.id ?? ""} channel={channel} />
               )}
 
