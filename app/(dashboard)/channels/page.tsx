@@ -1,4 +1,4 @@
-import ChannelsTable from "@/app/(dashboard)/channels/channels-table";
+import ChannelsTable from "@/app/(dashboard)/channels/channels-page";
 import { Flex, Text, Title } from "@tremor/react";
 import { Suspense } from "react";
 import { getSendCode } from "@/lib/markdown-code";

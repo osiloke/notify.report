@@ -10,26 +10,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/lib/hooks/user/useUser";
 import { cn, fetcher } from "@/lib/utils";
-import {
-  Badge,
-  Flex,
-  Grid,
-  NumberInput,
-  Text,
-  TextInput,
-  Title,
-} from "@tremor/react";
+import { Flex, Grid, NumberInput, Text, TextInput, Title } from "@tremor/react";
 import { m } from "framer-motion";
 import { Check, Copy, Key, Send } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR, { mutate } from "swr";
 import ChannelDialog from "./channel-dialog";
-import RegisterPhoneDialog from "./register-phone-dialog";
+import RegisterPhoneDialog from "./channel-login-dialog";
 import ChannelStarter from "./channel-starter";
 import { RocketIcon } from "@radix-ui/react-icons";
 import { Icons } from "@/components/icons";
@@ -62,7 +53,7 @@ interface ChannelDemoProps {
   user_id?: boolean;
 }
 
-const ChannelDemo = ({
+const ChannelOnboarding = ({
   code,
   channels,
   className,
@@ -151,7 +142,6 @@ const ChannelDemo = ({
       toast.error(json.error);
     } else {
       toast.success("First Message sent successfully!");
-
       setStep(4);
       onRefresh();
     }
@@ -204,7 +194,7 @@ const ChannelDemo = ({
           </Card>
           <Card
             className={cn("", {
-              "opacity-50 pointer-events-none": !channelReady || !key,
+              "opacity-50 pointer-events-none": !channelReady,
             })}
           >
             <CardHeader className="flex-row gap-4 items-center">
@@ -365,4 +355,4 @@ const ChannelDemo = ({
   );
 };
 
-export default ChannelDemo;
+export default ChannelOnboarding;

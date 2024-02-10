@@ -12,8 +12,15 @@ import {
 import { useCopyCode } from "@/lib/copyCode";
 import { useLogCount } from "@/lib/hooks/useLogCount";
 import { Col, Grid } from "@tremor/react";
-import { Suspense } from "react";
+import { redirect } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
+function RedirectToChannels() {
+  useEffect(() => {
+    redirect("/channels");
+  }, []);
+  return <></>;
+}
 export default function LogsPage({ code }: { code: any }) {
   useCopyCode();
   const { data, isLoading, refetch } = useLogCount({});
@@ -22,7 +29,8 @@ export default function LogsPage({ code }: { code: any }) {
   return (
     <Suspense>
       {!isLoading && logCount < 1 && (
-        <LogsOnboarding code={code} onRefresh={refetch} />
+        // <LogsOnboarding code={code} onRefresh={refetch} />
+        <RedirectToChannels />
       )}
       {!isLoading && logCount >= 1 && (
         <Grid numItems={1} numItemsLg={1} className="gap-6 w-full">
