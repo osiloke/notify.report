@@ -496,7 +496,7 @@ const columns: ColumnDef<Request>[] = [
       const url = row.getValue("url") as string;
       const path = new URL(url).pathname;
 
-      let completion: string = row.getValue("completion");
+      // let completion: string = row.getValue("completion");
       let prompt = "";
 
       // if (path === "/v1/completions") {
@@ -542,7 +542,7 @@ const columns: ColumnDef<Request>[] = [
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                navigator.clipboard.writeText(completion);
+                navigator.clipboard.writeText(prompt);
               }}
             >
               Copy Message Text

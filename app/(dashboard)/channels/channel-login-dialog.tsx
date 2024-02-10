@@ -2,6 +2,7 @@
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { useInstanceStatus } from "@/lib/hooks/api/useInstanceStatus";
 import useTimer from "@/lib/hooks/useTimer";
 import { cn } from "@/lib/utils";
 import { Dialog, Transition } from "@headlessui/react";
@@ -13,7 +14,12 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
-const RegisterPhoneDialog = ({ channel }: { id: string; channel: any }) => {
+const RegisterPhoneDialog = ({
+  channel,
+}: {
+  id: string;
+  channel: { id: string; phone?: string; status: string };
+}) => {
   function closeModal() {
     setIsOpen(false);
   }
@@ -43,6 +49,25 @@ const RegisterPhoneDialog = ({ channel }: { id: string; channel: any }) => {
       }
     },
   });
+
+  const { data: channelStatus } = useInstanceStatus({
+    id: channel?.id ?? "",
+    active:
+      qrCode != null &&
+      isOpen &&
+      channel != null &&
+      (channel?.status ?? "") == "running" &&
+      (channel?.phone ?? "").length == 0,
+  });
+
+  useEffect(() => {
+    if (!channelStatus) return;
+    if (channelStatus?.ok) {
+      mutate("/api/v1/channels");
+      toast.success("Your phone was linked successfully");
+      setIsOpen(false);
+    }
+  }, [channelStatus]);
 
   useEffect(() => {
     if (timerStarted.current == true) return;
@@ -90,7 +115,6 @@ const RegisterPhoneDialog = ({ channel }: { id: string; channel: any }) => {
       const json = await res.json();
       toast.success("QR created successfully!");
       setQrCode(json.results);
-      // setIsOpen(false);
     }
   };
   const isBusy = channel?.status != "running" || busy;
