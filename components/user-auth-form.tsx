@@ -43,7 +43,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       email: data.email.toLowerCase(),
       password: data.password,
       redirect: false,
-      callbackUrl: "/wuuf",
+      callbackUrl: "/channels",
     });
 
     setIsLoading(false);
@@ -57,7 +57,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
 
     if (provider === "credentials") {
-      router.push(signInResult?.url || "/wuuf");
+      router.push(signInResult?.url || "/channels");
     } else {
       toast({
         title: "Check your email",
@@ -167,7 +167,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGitHubLoading(true);
-          signIn("github", { callbackUrl: "/wuuf" });
+          signIn("github", { callbackUrl: "/channels" });
         }}
         disabled={isLoading || isGitHubLoading}
       >

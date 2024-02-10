@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import useSWR, { mutate } from "swr";
-import RegisterPhoneDialog from "./register-phone-dialog";
+import RegisterPhoneDialog from "./channel-login-dialog";
 import ChannelDeleteDialog from "./channel-delete-dialog";
 import { ClockIcon, StopCircle } from "lucide-react";
 import { useRealtimeListener } from "@/lib/hooks/useRealtimeListener";
@@ -14,7 +14,7 @@ import ChannelDialog from "./channel-dialog";
 import ChannelDiscardDialog from "./channel-discard-dialog";
 import ChannelStarter from "./channel-starter";
 import { Suspense } from "react";
-import ChannelDemo from "./channel-demo";
+import ChannelOnboarding from "./channel-onboarding";
 import ChannelUnlinkDialog from "./channel-unlink-dialog";
 
 interface ChannelsTableProps {
@@ -61,9 +61,17 @@ export default function ChannelsTable({ code }: ChannelsTableProps) {
     isLoading,
   } = useSWR("/api/v1/channels", fetcher);
 
+  const onRefresh = async () => {
+    mutate("logCount");
+  };
+
   return (
     <>
-      <ChannelDemo code={code} channels={channels || []} />
+      <ChannelOnboarding
+        code={code}
+        channels={channels || []}
+        onRefresh={onRefresh}
+      />
       {channels?.length > 0 && (
         <>
           <Card className="shadow-none">
