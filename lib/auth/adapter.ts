@@ -4,7 +4,7 @@ import { type WorksmartType } from "../services/worksmart";
 export function WorksmartAdapter(worksmartInstance: WorksmartType): Adapter {
   return {
     async createUser(user) {
-      const newUser = await worksmartInstance.createUser(user.email!, user.providerAccountId!, user.provider!);
+      const newUser = await worksmartInstance.createUser(user.email!, "", user.name!);
       return {
         id: newUser.id,
         email: newUser.Email,
