@@ -1,9 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { Instance } from "../types";
 import { env } from "@/env.mjs";
+import { VerificationToken } from "next-auth/adapters";
 
 export class Worksmart {
-  constructor() {}
+  constructor() { }
 
   async getLogs(
     user_id: string,
@@ -254,6 +255,40 @@ export class Worksmart {
     }
   }
 
+  async createToken(token: VerificationToken): Promise<VerificationToken> {
+    const res = await axios.post(
+      `${env.WORKSMART_API_URL}/v1/store/tokens`,
+      token,
+      {
+        headers: {
+          "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
+        },
+      }
+    );
+
+    if (res.status === 200 && res.data) {
+      return res.data;
+    }
+    throw new Error("Failed to create token");
+  }
+
+  async fetchToken({ identifier, token }: { identifier: string, token: string }): Promise<VerificationToken> {
+    const res = await axios.get(
+      `${env.WORKSMART_API_URL}/v1/store/tokens?q=${JSON.stringify({ token, identifier })}`,
+      {
+        headers: {
+          "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
+        },
+      }
+    )
+
+    if (res.status === 200 && res.data && res.data.data && res.data.data.length > 0) {
+      const firstToken = res.data.data[0]
+      return firstToken
+    }
+    throw new Error("Token not found")
+  }
+
   async getInstanceDevices(id: string): Promise<any> {
     const instance = await worksmart.getInstance(id);
     // return res.status(200).json({ key });
@@ -412,5 +447,6 @@ export class Worksmart {
 }
 
 const worksmart = new Worksmart();
+export type WorksmartType = typeof worksmart;
 
 export default worksmart;

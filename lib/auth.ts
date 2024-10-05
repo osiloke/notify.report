@@ -11,9 +11,10 @@ import EmailProvider from "next-auth/providers/email";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import worksmart from "./services/worksmart";
+import { WorksmartAdapter } from "./auth/adapter";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma as PrismaClient),
+  adapter: WorksmartAdapter(worksmart),
   pages: {
     signIn: "/login",
   },
@@ -42,32 +43,32 @@ export const authOptions: NextAuthOptions = {
     // Only enable credentials auth in development mode
     ...(process.env.NODE_ENV === "development"
       ? [
-          CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-              email: {
-                label: "Username",
-                type: "email",
-                placeholder: "johndoe@gmail.com",
-              },
-              password: { label: "Password", type: "password" },
+        CredentialsProvider({
+          name: "Credentials",
+          credentials: {
+            email: {
+              label: "Username",
+              type: "email",
+              placeholder: "johndoe@gmail.com",
             },
-            async authorize(
-              credentials: Record<"email" | "password", string> | undefined,
-              req
-            ) {
-              if (credentials === undefined) return null;
+            password: { label: "Password", type: "password" },
+          },
+          async authorize(
+            credentials: Record<"email" | "password", string> | undefined,
+            req
+          ) {
+            if (credentials === undefined) return null;
 
-              const existingUser = await worksmart.signin(
-                credentials.email,
-                credentials.password
-              );
-              if (!existingUser) return null;
+            const existingUser = await worksmart.signin(
+              credentials.email,
+              credentials.password
+            );
+            if (!existingUser) return null;
 
-              return existingUser;
-            },
-          }),
-        ]
+            return existingUser;
+          },
+        }),
+      ]
       : []),
   ],
   callbacks: {
