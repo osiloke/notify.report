@@ -5,20 +5,20 @@ import Email from "../templates/LoginLink";
 
 const sendWebVerificationRequest =
   (subject: string, from: string) =>
-  async (params: SendVerificationRequestParams) => {
-    try {
-      await resend?.sendEmail({
-        from,
-        to: params.identifier,
-        subject,
-        react: Email({
-          loginLink: params.url,
-        }),
-      });
-    } catch (error) {
-      console.log({ error });
-    }
-  };
+    async (params: SendVerificationRequestParams) => {
+      try {
+        await resend?.sendEmail({
+          from,
+          to: params.identifier,
+          subject,
+          react: Email({
+            loginLink: params.url,
+          }),
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+    };
 
 export const sendVerificationRequest = sendWebVerificationRequest(
   "Welcome to wuuf",
