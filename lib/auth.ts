@@ -43,32 +43,32 @@ export const authOptions: NextAuthOptions = {
     // Only enable credentials auth in development mode
     ...(process.env.NODE_ENV === "development"
       ? [
-        CredentialsProvider({
-          name: "Credentials",
-          credentials: {
-            email: {
-              label: "Username",
-              type: "email",
-              placeholder: "johndoe@gmail.com",
+          CredentialsProvider({
+            name: "Credentials",
+            credentials: {
+              email: {
+                label: "Username",
+                type: "email",
+                placeholder: "johndoe@gmail.com",
+              },
+              password: { label: "Password", type: "password" },
             },
-            password: { label: "Password", type: "password" },
-          },
-          async authorize(
-            credentials: Record<"email" | "password", string> | undefined,
-            req
-          ) {
-            if (credentials === undefined) return null;
+            async authorize(
+              credentials: Record<"email" | "password", string> | undefined,
+              req,
+            ) {
+              if (credentials === undefined) return null;
 
-            const existingUser = await worksmart.signin(
-              credentials.email,
-              credentials.password
-            );
-            if (!existingUser) return null;
+              const existingUser = await worksmart.signin(
+                credentials.email,
+                credentials.password,
+              );
+              if (!existingUser) return null;
 
-            return existingUser;
-          },
-        }),
-      ]
+              return existingUser;
+            },
+          }),
+        ]
       : []),
   ],
   callbacks: {
@@ -97,7 +97,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       return {
-        id: dbUser?.id,
+        id: user?.id ?? dbUser?.id,
         name: dbUser?.name ?? user?.name,
         email: dbUser?.Email ?? user?.email,
         picture: dbUser?.avatar?.url ?? user?.image ?? token?.picture,
@@ -115,7 +115,7 @@ export const authOptions: NextAuthOptions = {
 
         if (emails?.length > 0) {
           profile.email = emails.sort(
-            (a: any, b: any) => b.primary - a.primary
+            (a: any, b: any) => b.primary - a.primary,
           )[0].email;
 
           if (profile.email) {
@@ -124,7 +124,7 @@ export const authOptions: NextAuthOptions = {
               await worksmart.createUser(
                 profile.email,
                 account!.provider,
-                user.id
+                user.id,
               );
             }
           }
