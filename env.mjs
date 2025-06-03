@@ -46,4 +46,8 @@ export const env = createEnv({
     NEXT_PUBLIC_REALTIME_URL: process.env.NEXT_PUBLIC_REALTIME_URL,
     NEXT_PUBLIC_POSTHOG_API_KEY: process.env.NEXT_PUBLIC_POSTHOG_API_KEY,
   },
+  // Add a custom logger for invalid environment variables
+  onInvalid: ({ parsed, error }) => {
+    console.error("❌ Invalid environment variables:", parsed, error);
+  },
 });

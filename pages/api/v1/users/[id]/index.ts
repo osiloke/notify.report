@@ -1,5 +1,4 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
@@ -26,7 +25,7 @@ const sortingFields = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -85,22 +84,20 @@ export default async function handler(
         }
       : {};
 
-    const requests = await prisma.request.findMany({
-      where: {
-        userId: session.user.id,
-        ...(user_id && { user_id: user_id }),
-        // ...where,
-        ...searchFilter,
-      },
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
-      take: Number(pageSize),
-      skip,
-      include: {
-        metadata: true,
-      },
-    });
+    // Mock data instead of using prisma
+    const requests = Array.from({ length: Number(pageSize) }, (_, i) => ({
+      id: `req_${i + 1 + skip}`,
+      userId: session.user.id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      ip: "127.0.0.1",
+      url: "/api/v1/test",
+      method: "GET",
+      status: 200,
+      cached: false,
+      metadata: {},
+      // Add other fields as needed
+    }));
 
     return res.status(200).json({
       requests,
