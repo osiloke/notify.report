@@ -4,7 +4,7 @@ import { env } from "@/env.mjs";
 import { VerificationToken } from "next-auth/adapters";
 
 export class Worksmart {
-  constructor() { }
+  constructor() {}
 
   async getLogs(
     user_id: string,
@@ -14,7 +14,7 @@ export class Worksmart {
     }: {
       skip: number;
       pageSize: number;
-    }
+    },
   ): Promise<any> {
     const query = {
       skip: `${skip}`,
@@ -28,32 +28,69 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
   }
   async getUser(email: string): Promise<any> {
     const query = { q: `{"Email":"${email}"}` };
-    const res = await axios.get(
-      `${env.WORKSMART_API_URL}/v1/store/user?${new URLSearchParams(query)}`,
-      {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
+    try {
+      const res = await axios.get(
+        `${env.WORKSMART_API_URL}/v1/store/user?${new URLSearchParams(query)}`,
+        {
+          headers: {
+            "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
+            Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
+          },
         },
+      );
+      if (res.data.data.length > 0) {
+        return res.data.data[0];
       }
-    );
-    if (res.data.data.length > 0) {
-      return res.data.data[0];
+      return null;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        console.error(
+          "Worksmart API returned 401. Attempting to refresh token.",
+          error,
+        );
+        try {
+          const newToken = await this.refreshToken();
+          // TODO: Implement mechanism to update the stored WORKSMART_AUTH_TOKEN with the new token
+          // For now, retry the request with the new token directly
+          const retryRes = await axios.get(
+            `${env.WORKSMART_API_URL}/v1/store/user?${new URLSearchParams(
+              query,
+            )}`,
+            {
+              headers: {
+                "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
+                Authorization: `Bearer ${newToken}`,
+              },
+            },
+          );
+          if (retryRes.data.data.length > 0) {
+            return retryRes.data.data[0];
+          }
+          return null;
+        } catch (refreshError) {
+          console.error(
+            "Failed to refresh token and retry request:",
+            refreshError,
+          );
+          throw new Error("Failed to refresh Worksmart token and fetch user");
+        }
+      }
+      console.error("Error fetching user from Worksmart API:", error);
+      throw error;
     }
-    return null;
   }
 
   async createUser(
     email: string,
     provider: string,
-    providerID: string
+    providerID: string,
   ): Promise<any> {
     const res = await axios.post(
       `${env.WORKSMART_API_URL}/v1/store/user`,
@@ -67,7 +104,7 @@ export class Worksmart {
           "x-dostow-group": env.WORKSMART_GROUP,
           Authorization: `${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data.data;
@@ -86,7 +123,7 @@ export class Worksmart {
             "content-type": "application/json",
             "x-dostow-group-access-key": env.WORKSMART_API_KEY,
           },
-        }
+        },
       );
 
       const { Email, id, name } = res.data.data;
@@ -98,11 +135,11 @@ export class Worksmart {
 
   async deleteApiKey(
     id: string,
-    user_id: string
+    user_id: string,
   ): Promise<{ access_key: string; created_at: string; id: string }[]> {
     const keyName = `ugk_${user_id}`;
     const existing = await axios.get(
-      `${env.WORKSMART_API_URL}/v1/group_key/${id}`
+      `${env.WORKSMART_API_URL}/v1/group_key/${id}`,
     );
     if (!existing.data.name.includes(keyName)) {
       throw new Error("invalid key");
@@ -114,14 +151,14 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data.data;
   }
 
   async getApiKey(
-    user_id: string
+    user_id: string,
   ): Promise<{ access_key: string; created_at: string; id: string }[]> {
     const query = { q: `{"name": "^ugk_${user_id}.*"}` };
     const res = await axios.get(
@@ -131,7 +168,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data.data;
@@ -158,7 +195,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -193,7 +230,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -207,7 +244,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -220,7 +257,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -263,7 +300,7 @@ export class Worksmart {
         headers: {
           "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
         },
-      }
+      },
     );
 
     if (res.status === 200 && res.data) {
@@ -272,21 +309,35 @@ export class Worksmart {
     throw new Error("Failed to create token");
   }
 
-  async fetchToken({ identifier, token }: { identifier: string, token: string }): Promise<VerificationToken> {
+  async fetchToken({
+    identifier,
+    token,
+  }: {
+    identifier: string;
+    token: string;
+  }): Promise<VerificationToken> {
     const res = await axios.get(
-      `${env.WORKSMART_API_URL}/v1/store/tokens?q=${JSON.stringify({ token, identifier })}`,
+      `${env.WORKSMART_API_URL}/v1/store/tokens?q=${JSON.stringify({
+        token,
+        identifier,
+      })}`,
       {
         headers: {
           "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
         },
-      }
-    )
+      },
+    );
 
-    if (res.status === 200 && res.data && res.data.data && res.data.data.length > 0) {
-      const firstToken = res.data.data[0]
-      return firstToken
+    if (
+      res.status === 200 &&
+      res.data &&
+      res.data.data &&
+      res.data.data.length > 0
+    ) {
+      const firstToken = res.data.data[0];
+      return firstToken;
     }
-    throw new Error("Token not found")
+    throw new Error("Token not found");
   }
 
   async getInstanceDevices(id: string): Promise<any> {
@@ -307,7 +358,7 @@ export class Worksmart {
   async sendWhatsappMessage(
     phone: string,
     text: string,
-    key: string
+    key: string,
   ): Promise<any> {
     const url = `https://api.vazapay.com/v1/wuuf/message`;
     const response = await axios.post(
@@ -323,7 +374,7 @@ export class Worksmart {
           "content-type": "application/json",
           "z-api-key": key,
         },
-      }
+      },
     );
     if (response.status === 200) {
       return response.data;
@@ -334,7 +385,7 @@ export class Worksmart {
   async createInstance(
     user_id: string,
     name: string,
-    instance_type: string
+    instance_type: string,
   ): Promise<Instance> {
     const res = await axios.post(
       `${env.WORKSMART_API_URL}/v1/store/instance`,
@@ -348,13 +399,12 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
   }
 
-  // TODO: password and location of wuufman instance should not be exposed to this service. instead use a store with a pull request to execute actions
   async startInstance(id: string): Promise<Instance> {
     const res = await axios.put(
       `${env.WORKSMART_API_URL}/v1/store/instance/${id}`,
@@ -367,7 +417,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -385,7 +435,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -395,14 +445,14 @@ export class Worksmart {
     const query = { q: `{"user_id": "${user_id}"}` };
     const res = await axios.get(
       `${env.WORKSMART_API_URL}/v1/store/instance?${new URLSearchParams(
-        query
+        query,
       )}`,
       {
         headers: {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data.data;
@@ -411,7 +461,7 @@ export class Worksmart {
   async updateInstancePhone(
     id: string,
     phone: string,
-    name: string
+    name: string,
   ): Promise<any> {
     const res = await axios.put(
       `${env.WORKSMART_API_URL}/v1/store/instance/${id}`,
@@ -424,7 +474,7 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data;
@@ -439,10 +489,31 @@ export class Worksmart {
           "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
           Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
         },
-      }
+      },
     );
 
     return res.data.data;
+  }
+
+  async refreshToken(): Promise<string> {
+    try {
+      const res = await axios.post(`${env.WORKSMART_API_URL}/v1/auth/refresh`, {
+        refresh_token: env.WORKSMART_REFRESH_TOKEN,
+      });
+      if (res.data && res.data.token) {
+        // TODO: Implement mechanism to update the stored WORKSMART_AUTH_TOKEN with the new token
+        console.log("Worksmart token refreshed successfully.");
+        return res.data.token;
+      }
+      console.error(
+        "Worksmart token refresh failed: No token in response",
+        res.data,
+      );
+      throw new Error("Worksmart token refresh failed: No token in response");
+    } catch (error) {
+      console.error("Worksmart token refresh failed:", error);
+      throw new Error("Worksmart token refresh failed");
+    }
   }
 }
 

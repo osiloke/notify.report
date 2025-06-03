@@ -1,6 +1,4 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
-import { Request } from "@prisma/client";
 import { parseISO } from "date-fns";
 import { json2csv } from "json-2-csv";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -8,7 +6,7 @@ import { getServerSession } from "next-auth";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
@@ -27,33 +25,42 @@ export default async function handler(
   const startDate = parseISO(start as string);
   const endDate = parseISO(end as string);
 
-  const requests = await prisma.request.findMany({
-    select: {
-      createdAt: true,
-      id: true,
-      ip: true,
-      url: true,
-      method: true,
-      status: true,
-      cost: true,
-      cached: true,
-      streamed: true,
-      prompt: true,
-      completion: true,
-      request_headers: true,
-    },
-    where: {
-      createdAt: {
-        gte: startDate,
-        lte: endDate,
+  // Mock data for demonstration purposes
+  const mockRequests = [
+    {
+      createdAt: "2024-06-01T12:00:00Z",
+      id: "1",
+      ip: "127.0.0.1",
+      url: "/api/test",
+      method: "GET",
+      status: 200,
+      cost: 0.01,
+      cached: false,
+      streamed: false,
+      request_headers: {
+        "x-metadata-user": "testuser",
+        "x-metadata-role": "admin",
       },
+      prompt: "Test prompt",
+      completion: "Test completion",
       userId: session.user.id,
     },
+    // Add more mock request objects as needed
+  ];
+
+  // Replace Prisma query with mock data filtering
+  const requests = mockRequests.filter((request) => {
+    const createdAt = new Date(request.createdAt);
+    return (
+      createdAt >= startDate &&
+      createdAt <= endDate &&
+      request.userId === session.user.id
+    );
   });
 
-  const filteredRequests = requests.map((request: Request) => {
+  const filteredRequests = requests.map((request: any) => {
     const metadata = Object.entries(request.request_headers!).filter(
-      ([key, _]) => key.startsWith("x-metadata")
+      ([key, _]) => key.startsWith("x-metadata"),
     );
     return {
       ...request,

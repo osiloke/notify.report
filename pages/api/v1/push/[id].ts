@@ -1,5 +1,4 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { env } from "@/env.mjs";
@@ -7,7 +6,7 @@ import worksmart from "@/lib/services/worksmart";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -19,7 +18,7 @@ export default async function handler(
     const { id } = req.query;
     const push = await worksmart.createPushPrivateChannel(
       id as string,
-      req.body
+      req.body,
     );
     return res.status(200).json({ token: push.channels[0].token });
   } else {

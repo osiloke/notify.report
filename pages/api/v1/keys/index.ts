@@ -1,5 +1,4 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import worksmart from "@/lib/services/worksmart";
 import { createHash, randomBytes } from "crypto";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -24,7 +23,7 @@ const sensitizeKey = (key: string, numStars: number = 16) => {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 

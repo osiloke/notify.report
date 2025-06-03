@@ -1,5 +1,4 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import worksmart from "@/lib/services/worksmart";
 import { endOfDay, startOfDay } from "date-fns";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -16,7 +15,7 @@ const dateSchema = z
     },
     {
       message: "Invalid date format, expected 'yyyy-MM-dd'",
-    }
+    },
   )
   .transform((value) => {
     const [year, month, day] = value.split("-");
@@ -30,7 +29,7 @@ const QueryParameters = z.object({
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 

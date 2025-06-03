@@ -1,10 +1,5 @@
 import { env } from "@/env.mjs";
-import prisma from "@/lib/prisma";
 import { sendVerificationRequest } from "@/lib/resend/emails/sendVerificationRequest";
-import { createOrRetrieveCustomer } from "@/pages/api/v1/stripe/checkout";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";

@@ -1,6 +1,10 @@
-import prisma from "@/lib/prisma";
 import { stripe } from "@/lib/stripe/stripe";
 import Stripe from "stripe";
+
+// Mock data stores
+const mockUsers: any[] = [];
+const mockSubscriptions: any[] = [];
+const mockPayments: any[] = [];
 
 export const toDateTime = (secs: number) => {
   var t = new Date("1970-01-01T00:30:00Z"); // Unix epoch start.
@@ -13,7 +17,7 @@ export const toDateTime = (secs: number) => {
  */
 export const copyBillingDetailsToCustomer = async (
   uuid: string,
-  payment_method: Stripe.PaymentMethod
+  payment_method: Stripe.PaymentMethod,
 ) => {
   const customer = payment_method.customer as string;
   const { name, phone, address } = payment_method.billing_details;
@@ -31,28 +35,27 @@ export const copyBillingDetailsToCustomer = async (
     },
   });
 
-  const user = await prisma.user.update({
-    where: { id: uuid },
-    data: {
+  // Replace prisma.user.update with mock data operation
+  const userIndex = mockUsers.findIndex((u) => u.id === uuid);
+  if (userIndex !== -1) {
+    mockUsers[userIndex] = {
+      ...mockUsers[userIndex],
       billing_address: { ...address },
       payment_method: JSON.stringify(payment_method[payment_method.type]),
-    },
-  });
+    };
+  }
 };
 
 export const manageSubscriptionStatusChange = async (
   subscriptionId: string,
   customerId: string,
-  createAction = false
+  createAction = false,
 ) => {
-  // Get customer's UUID from mapping table.
-  const user = await prisma.user.findUnique({
-    // select: { id: true },
-    where: { stripe_customer_id: customerId },
-  });
+  // Replace prisma.user.findUnique with mock data operation
+  const user = mockUsers.find((u) => u.stripe_customer_id === customerId);
 
   console.log(
-    `User [${user?.id}] is changing subscription [${subscriptionId}] wth customer [${customerId}]`
+    `User [${user?.id}] is changing subscription [${subscriptionId}] wth customer [${customerId}]`,
   );
 
   if (!user) {
@@ -79,10 +82,10 @@ export const manageSubscriptionStatusChange = async (
       ? toDateTime(subscription.canceled_at).toISOString()
       : null,
     current_period_start: toDateTime(
-      subscription.current_period_start
+      subscription.current_period_start,
     ).toISOString(),
     current_period_end: toDateTime(
-      subscription.current_period_end
+      subscription.current_period_end,
     ).toISOString(),
     created: toDateTime(subscription.created).toISOString(),
     ended_at: subscription.ended_at
@@ -96,14 +99,21 @@ export const manageSubscriptionStatusChange = async (
       : null,
   };
 
-  const result = await prisma.subscription.upsert({
-    where: { id: subscriptionData.id },
-    create: subscriptionData,
-    update: subscriptionData,
-  });
+  // Replace prisma.subscription.upsert with mock data operation
+  const existingSubscriptionIndex = mockSubscriptions.findIndex(
+    (sub) => sub.id === subscriptionData.id,
+  );
+  let result;
+  if (existingSubscriptionIndex !== -1) {
+    mockSubscriptions[existingSubscriptionIndex] = subscriptionData;
+    result = mockSubscriptions[existingSubscriptionIndex];
+  } else {
+    mockSubscriptions.push(subscriptionData);
+    result = subscriptionData;
+  }
 
   console.log(
-    `Inserted/updated subscription [${result.id}] for user [${result.userId}]`
+    `Inserted/updated subscription [${result.id}] for user [${result.userId}]`,
   );
 
   // For a new subscription copy the billing details to the customer object.
@@ -112,18 +122,16 @@ export const manageSubscriptionStatusChange = async (
     //@ts-ignore
     await copyBillingDetailsToCustomer(
       user.id,
-      subscription.default_payment_method as Stripe.PaymentMethod
+      subscription.default_payment_method as Stripe.PaymentMethod,
     );
 };
 
 export const upsertPaymentIntentRecord = async (
   paymentIntentId: string,
-  customerId: string
+  customerId: string,
 ) => {
-  // Get customer's UUID from mapping table.
-  const user = await prisma.user.findUnique({
-    where: { stripe_customer_id: customerId },
-  });
+  // Replace prisma.user.findUnique with mock data operation
+  const user = mockUsers.find((u) => u.stripe_customer_id === customerId);
 
   if (!user) {
     throw new Error("User not found.");
@@ -148,14 +156,20 @@ export const upsertPaymentIntentRecord = async (
       : null,
   };
 
-  // Upsert payment intent record.
-  const paymentIntentRecord = await prisma.payment.upsert({
-    where: { id: paymentIntentId },
-    create: payment,
-    update: payment,
-  });
+  // Replace prisma.payment.upsert with mock data operation
+  const existingPaymentIndex = mockPayments.findIndex(
+    (p) => p.id === paymentIntentId,
+  );
+  let paymentIntentRecord;
+  if (existingPaymentIndex !== -1) {
+    mockPayments[existingPaymentIndex] = payment;
+    paymentIntentRecord = mockPayments[existingPaymentIndex];
+  } else {
+    mockPayments.push(payment);
+    paymentIntentRecord = payment;
+  }
 
   console.log(
-    `Inserted/updated payment intent [${paymentIntentRecord.id}] for user [${paymentIntentRecord.userId}]`
+    `Inserted/updated payment intent [${paymentIntentRecord.id}] for user [${paymentIntentRecord.userId}]`,
   );
 };

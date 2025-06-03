@@ -21,13 +21,16 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: z.string().optional(),
     STRIPE_SECRET_KEY: z.string().optional(),
 
-    RESEND_FROM_ADDRESS: z.string().optional(),
+    MAILMORE_API_KEY: z.string().optional(),
     RESEND_FROM_NAME: z.string().optional(),
+    RESEND_FROM_ADDRESS: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
+    WUUF_API_KEY: z.string().optional(),
 
     WORKSMART_API_URL: z.string(),
     WORKSMART_API_KEY: z.string(),
     WORKSMART_AUTH_TOKEN: z.string(),
+    WORKSMART_REFRESH_TOKEN: z.string(),
     WORKSMART_GROUP: z.string().optional(),
   },
   client: {

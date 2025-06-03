@@ -8,7 +8,6 @@ const millionConfig = {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   ...(process.env.NODE_ENV === "production" && {
     compiler: {
       removeConsole: {
@@ -39,9 +38,7 @@ const nextConfig = {
     domains: ["avatars.githubusercontent.com", "lh3.googleusercontent.com"],
   },
   transpilePackages: ["react-tweet"],
-  experimental: {
-    serverComponentsExternalPackages: ["shiki"],
-  },
+  serverExternalPackages: ["shiki"],
 };
 
 export default million.next(nextConfig, millionConfig);

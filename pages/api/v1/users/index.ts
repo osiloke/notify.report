@@ -1,12 +1,57 @@
 import { authOptions } from "@/lib/auth";
 import { calculateCost } from "@/lib/llm/calculateCost";
-import prisma from "@/lib/prisma";
 import { Snapshot } from "@/lib/types";
-import { Request } from "@prisma/client";
 import { endOfDay, startOfDay } from "date-fns";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
+
+interface MockRequest {
+  user_id: string | null;
+  model: string | null;
+  prompt_tokens: number | null;
+  completion_tokens: number | null;
+  createdAt: Date; // Add createdAt for date filtering
+}
+
+// Mock data store
+const mockRequests: MockRequest[] = [
+  {
+    user_id: "user1",
+    model: "gpt-3.5-turbo",
+    prompt_tokens: 100,
+    completion_tokens: 50,
+    createdAt: new Date("2023-10-26T10:00:00Z"),
+  },
+  {
+    user_id: "user2",
+    model: "gpt-4",
+    prompt_tokens: 200,
+    completion_tokens: 100,
+    createdAt: new Date("2023-10-26T11:00:00Z"),
+  },
+  {
+    user_id: "user1",
+    model: "gpt-3.5-turbo",
+    prompt_tokens: 150,
+    completion_tokens: 75,
+    createdAt: new Date("2023-10-27T10:00:00Z"),
+  },
+  {
+    user_id: "user3",
+    model: "gpt-4",
+    prompt_tokens: 300,
+    completion_tokens: 150,
+    createdAt: new Date("2023-10-27T12:00:00Z"),
+  },
+  {
+    user_id: "user2",
+    model: "gpt-3.5-turbo",
+    prompt_tokens: 120,
+    completion_tokens: 60,
+    createdAt: new Date("2023-10-28T09:00:00Z"),
+  },
+];
 
 const dateSchema = z
   .string()
@@ -18,7 +63,7 @@ const dateSchema = z
     },
     {
       message: "Invalid date format, expected 'yyyy-MM-dd'",
-    }
+    },
   )
   .transform((value) => {
     const [year, month, day] = value.split("-");
@@ -44,7 +89,7 @@ const sortingFields = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -96,36 +141,58 @@ export default async function handler(
         }
       }
 
-      const requests = await prisma.request.findMany({
-        where: {
-          userId: session.user.id,
-          ...where,
-          ...searchFilter,
-          ...dateFilter,
-        },
-        orderBy: {
-          [sortBy]: sortOrder,
-        },
-        // take: Number(pageSize),
-        // skip,
-        select: {
-          user_id: true,
-          model: true,
-          prompt_tokens: true,
-          completion_tokens: true,
-        },
+      // Replace Prisma query with mock data filtering and sorting
+      let requests = mockRequests.filter(
+        (request) => request.user_id === session.user.id,
+      );
+
+      // Apply date filter
+      if (dateFilter.createdAt) {
+        requests = requests.filter((request) => {
+          if (dateFilter.createdAt?.gte && dateFilter.createdAt?.lte) {
+            return (
+              request.createdAt >= dateFilter.createdAt.gte &&
+              request.createdAt <= dateFilter.createdAt.lte
+            );
+          } else if (dateFilter.createdAt?.gte) {
+            return request.createdAt >= dateFilter.createdAt.gte;
+          } else if (dateFilter.createdAt?.lte) {
+            return request.createdAt <= dateFilter.createdAt.lte;
+          }
+          return true;
+        });
+      }
+
+      // Apply search filter (basic user_id search for mock data)
+      if (searchFilter.OR) {
+        requests = requests.filter((request) =>
+          searchFilter.OR.some(
+            (filter: any) =>
+              filter.user_id?.search &&
+              request.user_id?.includes(filter.user_id.search),
+          ),
+        );
+      }
+
+      // Apply sorting (basic sorting for mock data)
+      requests.sort((a, b) => {
+        const aValue = (a as any)[sortBy];
+        const bValue = (b as any)[sortBy];
+        if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+        if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+        return 0;
       });
 
-      const filteredUsers: (Partial<Request> & { cost: number })[] = requests
+      const filteredUsers: (MockRequest & { cost: number })[] = requests
         .filter(
-          (request: any) =>
+          (request: MockRequest) =>
             request.user_id !== null &&
             request.user_id !== "" &&
             request.model !== null &&
             request.prompt_tokens !== null &&
-            request.completion_tokens !== null
+            request.completion_tokens !== null,
         )
-        .map((request: any) => {
+        .map((request: MockRequest) => {
           return {
             ...request,
             cost: calculateCost({
@@ -147,7 +214,7 @@ export default async function handler(
               total_cost: number;
             };
           },
-          user
+          user,
         ) => {
           if (!user.user_id) return acc;
 
@@ -168,11 +235,11 @@ export default async function handler(
 
           return acc;
         },
-        {}
+        {},
       );
 
       const sortedUsers = Object.values(users).sort(
-        (a, b) => b.total_cost - a.total_cost
+        (a, b) => b.total_cost - a.total_cost,
       );
 
       const skip = (Number(pageNumber) - 1) * Number(pageSize);

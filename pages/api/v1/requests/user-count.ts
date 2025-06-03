@@ -1,11 +1,10 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -14,14 +13,17 @@ export default async function handler(
   }
 
   if (req.method === "GET") {
-    const totalCount = await prisma.request.count({
-      where: {
-        userId: session.user.id,
-        user_id: {
-          not: null,
-        },
-      },
-    });
+    // Mock data for demonstration; replace with actual Prisma query as needed
+    const mockRequests = [
+      { userId: session.user.id, user_id: 1 },
+      { userId: session.user.id, user_id: 2 },
+      { userId: "otherUser", user_id: 3 },
+      { userId: session.user.id, user_id: null },
+    ];
+    const totalCount = mockRequests.filter(
+      (request) =>
+        request.userId === session.user.id && request.user_id !== null,
+    ).length;
 
     console.log(totalCount);
 

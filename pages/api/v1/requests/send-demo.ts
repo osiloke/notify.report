@@ -1,5 +1,4 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import worksmart from "@/lib/services/worksmart";
 import { AxiosError } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -7,7 +6,7 @@ import { getServerSession } from "next-auth";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -21,7 +20,7 @@ export default async function handler(
       const request = await worksmart.sendWhatsappMessage(
         phone,
         "wuuf wuuf 🐶",
-        key
+        key,
       );
       return res.status(200).json({
         request,

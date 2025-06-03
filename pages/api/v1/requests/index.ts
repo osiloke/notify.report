@@ -1,10 +1,15 @@
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { formatQuery } from "react-querybuilder";
 import { sha256 } from "../keys";
 import worksmart from "@/lib/services/worksmart";
+
+// Mock API keys for demonstration/testing purposes
+const mockApiKeys = [
+  { hashed_key: "mock_hashed_key_1", user: { id: "mock_user_id_1" } },
+  { hashed_key: "mock_hashed_key_2", user: { id: "mock_user_id_2" } },
+];
 
 type QueryParameters = {
   user_id?: string;
@@ -64,7 +69,7 @@ const isEmpty = (obj: any) => {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   let userId = null as string | null;
   const session = await getServerSession(req, res, authOptions);
@@ -105,8 +110,8 @@ export default async function handler(
         formatQuery(JSON.parse(filter), {
           format: "json_without_ids",
           parseNumbers: true,
-        })
-      )
+        }),
+      ),
     );
 
     const searchFilter = search
@@ -134,55 +139,6 @@ export default async function handler(
         }
       : {};
 
-    // const requests = await prisma.request.findMany({
-    //   where: {
-    //     userId,
-    //     ...(user_id && { user_id: decodeURIComponent(user_id) }),
-    //     ...metadataFilter,
-    //     ...searchFilter,
-    //   },
-    //   orderBy: {
-    //     [sortBy]: sortOrder,
-    //   },
-    //   take: Number(pageSize),
-    //   skip,
-    //   select: {
-    //     id: true,
-    //     createdAt: true,
-    //     updatedAt: true,
-    //     ip: true,
-    //     url: true,
-    //     method: true,
-    //     status: true,
-    //     cached: true,
-    //     streamed: true,
-    //     // metadata: true,
-    //     user_id: true,
-    //     completion: true,
-    //     model: true,
-    //     openai_id: true,
-    //     cost: true,
-
-    //     prompt_tokens: true,
-    //     completion_tokens: true,
-
-    //     request_headers: true,
-    //     request_body: true,
-    //     response_body: true,
-    //     streamed_response_body: true,
-    //   },
-    // });
-
-    // const totalCount = await prisma.request.count({
-    //   where: {
-    //     userId,
-    //     ...(user_id && { user_id: user_id }),
-    //     ...metadataFilter,
-    //     // ...where,
-    //     ...searchFilter,
-    //   },
-    // });
-
     const data = await worksmart.getLogs(session!.user.id, { skip, pageSize });
     const requests = data.data;
     const totalCount = data.total_count;
@@ -195,7 +151,7 @@ export default async function handler(
           request_body: v.message?.text ?? "",
           model: v.channel_provider,
           request_headers: {},
-        })
+        }),
       ),
       totalCount,
     });
@@ -214,13 +170,7 @@ const getBearerToken = (request: NextApiRequest) => {
 };
 
 const getUser = async (apiKey: string) => {
-  const key = await prisma.apiKey.findUnique({
-    where: {
-      hashed_key: await sha256(apiKey),
-    },
-    include: {
-      user: true,
-    },
-  });
+  const hashedApiKey = await sha256(apiKey);
+  const key = mockApiKeys.find((k) => k.hashed_key === hashedApiKey);
   return key?.user;
 };

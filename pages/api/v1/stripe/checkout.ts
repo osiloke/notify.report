@@ -4,10 +4,16 @@ import { NextApiHandler } from "next";
 import { stripe } from "@/lib/stripe/stripe";
 // import { createOrRetrieveCustomer } from '@/utils/supabase-admin';
 import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
 import { getURL } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import worksmart from "@/lib/services/worksmart";
+
+// Mock users array for demonstration purposes
+const mockUsers: Array<{
+  id: string;
+  stripe_customer_id?: string;
+  email?: string;
+}> = [];
 
 export const createOrRetrieveCustomer = async ({
   email,
@@ -40,14 +46,14 @@ export const createOrRetrieveCustomer = async ({
 
     const customer = await stripe.customers.create(customerData);
 
-    await prisma.user.update({
-      where: {
-        id: uuid,
-      },
-      data: {
+    // Replace prisma.user.update with mock data operation
+    const userIndex = mockUsers.findIndex((u) => u.id === uuid);
+    if (userIndex !== -1) {
+      mockUsers[userIndex] = {
+        ...mockUsers[userIndex],
         stripe_customer_id: customer.id,
-      },
-    });
+      };
+    }
     return customer.id;
   }
   return user.stripe_customer_id;

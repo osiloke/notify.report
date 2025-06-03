@@ -1,4 +1,3 @@
-import prisma from "@/lib/prisma";
 import { stripe } from "@/lib/stripe/stripe";
 import {
   manageSubscriptionStatusChange,
@@ -35,6 +34,9 @@ const relevantEvents = new Set([
   "customer.subscription.deleted",
 ]);
 
+// Mock users array for demonstration purposes
+const mockUsers: Array<{ id: string; stripe_customer_id?: string }> = [];
+
 const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const buf = await buffer(req);
@@ -68,7 +70,7 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             await manageSubscriptionStatusChange(
               subscription.id,
               subscription.customer as string,
-              event.type === "customer.subscription.created"
+              event.type === "customer.subscription.created",
             );
             break;
           case "checkout.session.completed":
@@ -76,19 +78,21 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
               .object as Stripe.Checkout.Session;
 
             if (checkoutSession.mode === "subscription") {
-              const user = await prisma.user.update({
-                where: {
-                  id: checkoutSession.client_reference_id as string,
-                },
-                data: {
-                  stripe_customer_id: checkoutSession.customer as string,
-                },
-              });
+              // Replace prisma.user.update with mock data operation
+              const userId = checkoutSession.client_reference_id as string;
+              const customerId = checkoutSession.customer as string;
+              const userIndex = mockUsers.findIndex((u) => u.id === userId);
+              if (userIndex !== -1) {
+                mockUsers[userIndex] = {
+                  ...mockUsers[userIndex],
+                  stripe_customer_id: customerId,
+                };
+              }
               const subscriptionId = checkoutSession.subscription;
               await manageSubscriptionStatusChange(
                 subscriptionId as string,
-                user?.stripe_customer_id as string,
-                true
+                customerId as string,
+                true,
               );
             } else if (checkoutSession.mode === "payment") {
               const customerId = await createOrRetrieveCustomer({
@@ -99,7 +103,7 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
               console.log(checkoutSession);
               await upsertPaymentIntentRecord(
                 paymentIntentId as string,
-                customerId as string
+                customerId as string,
               );
             }
             break;
