@@ -151,18 +151,20 @@ export function MainNav() {
             </NavigationMenuContent>
           </NavigationMenuItem> */}
           <NavigationMenuItem>
-            <Link href="https://zaap.mintlify.app" passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Docs
-              </NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink
+              href="https://zaap.mintlify.app"
+              className={navigationMenuTriggerStyle()}
+            >
+              Docs
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/pricing" passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Pricing
-              </NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink
+              href="/pricing"
+              className={navigationMenuTriggerStyle()}
+            >
+              Pricing
+            </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
