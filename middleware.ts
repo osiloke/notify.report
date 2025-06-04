@@ -1,8 +1,7 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import type { NextAuthRequest } from "next-auth/middleware";
 
-export default auth((req: NextAuthRequest) => {
+export default auth((req: any) => {
   const isAuth = !!req.auth;
   const isAuthPage =
     req.nextUrl.pathname.startsWith("/login") ||
