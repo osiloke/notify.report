@@ -1,6 +1,5 @@
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
 import { formatQuery } from "react-querybuilder";
 import { sha256 } from "../keys";
 import worksmart from "@/lib/services/worksmart";
@@ -72,7 +71,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   let userId = null as string | null;
-  const session = await getServerSession(req, res, authOptions);
+  const session = await auth();
 
   if (!session) {
     const token = getBearerToken(req);

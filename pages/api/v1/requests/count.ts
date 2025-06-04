@@ -1,8 +1,7 @@
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import worksmart from "@/lib/services/worksmart";
 import { endOfDay, startOfDay } from "date-fns";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 const dateSchema = z
@@ -31,7 +30,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await auth();
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });

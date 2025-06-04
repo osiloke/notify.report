@@ -497,22 +497,26 @@ export class Worksmart {
 
   async refreshToken(): Promise<string> {
     try {
-      const res = await axios.post(`${env.WORKSMART_API_URL}/v1/auth/refresh`, {
-        refresh_token: env.WORKSMART_REFRESH_TOKEN,
-      });
-      if (res.data && res.data.token) {
-        // TODO: Implement mechanism to update the stored WORKSMART_AUTH_TOKEN with the new token
-        console.log("Worksmart token refreshed successfully.");
-        return res.data.token;
-      }
-      console.error(
-        "Worksmart token refresh failed: No token in response",
-        res.data,
+      const response = await axios.post<{ access_token: string }>(
+        `${env.WORKSMART_API_URL}/v1/auth/refresh`,
+        {
+          refresh_token: env.WORKSMART_REFRESH_TOKEN,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
+          },
+        },
       );
-      throw new Error("Worksmart token refresh failed: No token in response");
-    } catch (error) {
-      console.error("Worksmart token refresh failed:", error);
-      throw new Error("Worksmart token refresh failed");
+
+      if (!response.data?.access_token) {
+        throw new Error("No access token in refresh response");
+      }
+      return response.data.access_token;
+    } catch (error: unknown) {
+      console.error("Failed to refresh Worksmart token:", error);
+      throw new Error("Failed to refresh Worksmart token");
     }
   }
 }

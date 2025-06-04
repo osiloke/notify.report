@@ -1,5 +1,12 @@
 import { env } from "@/env.mjs";
-import { SendVerificationRequestParams } from "next-auth/providers";
+
+// Define the expected shape of SendVerificationRequestParams
+export interface SendVerificationRequestParams {
+  identifier: string;
+  token: string;
+  url: string;
+  expires: Date | string;
+}
 
 export const sendVerificationRequest = async (
   params: SendVerificationRequestParams,

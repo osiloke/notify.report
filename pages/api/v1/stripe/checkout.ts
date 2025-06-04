@@ -2,10 +2,8 @@
 import { NextApiHandler } from "next";
 
 import { stripe } from "@/lib/stripe/stripe";
-// import { createOrRetrieveCustomer } from '@/utils/supabase-admin';
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { getURL } from "@/lib/utils";
-import { getServerSession } from "next-auth";
 import worksmart from "@/lib/services/worksmart";
 
 // Mock users array for demonstration purposes
@@ -64,7 +62,7 @@ const CreateCheckoutSession: NextApiHandler = async (req, res) => {
     const { priceId, quantity = 1, metadata = {} } = req.body;
 
     try {
-      const session = await getServerSession(req, res, authOptions);
+      const session = await auth();
 
       if (!session) {
         return res.status(401).json({ message: "You must be logged in." });
