@@ -1,9 +1,8 @@
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { calculateCost } from "@/lib/llm/calculateCost";
 import { Snapshot } from "@/lib/types";
 import { endOfDay, startOfDay } from "date-fns";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 interface MockRequest {
@@ -91,7 +90,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await auth();
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });

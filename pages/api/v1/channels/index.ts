@@ -1,14 +1,14 @@
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
+
 import { env } from "@/env.mjs";
 import worksmart from "@/lib/services/worksmart";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await auth();
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
@@ -19,7 +19,7 @@ export default async function handler(
     const instance = await worksmart.createInstance(
       session.user.id,
       name,
-      "whatsapp"
+      "whatsapp",
     );
     return res.status(200).json({ instance });
   } else if (req.method === "GET") {
@@ -32,7 +32,7 @@ export default async function handler(
         user_id,
         phone,
         created_at,
-      }))
+      })),
     );
   } else {
     return res.status(405).json({ error: "Method not allowed" });

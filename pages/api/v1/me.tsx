@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
 
 type Data = {
   user?: any;
@@ -12,7 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await auth()
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });

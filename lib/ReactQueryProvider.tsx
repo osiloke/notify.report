@@ -1,7 +1,7 @@
 "use client";
 
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { Hydrate, QueryClient, dehydrate } from "@tanstack/react-query";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 import {
   PersistQueryClientProvider,
   PersistedClient,
@@ -12,9 +12,9 @@ import { PropsWithChildren, useState } from "react";
 
 export function blankIDBPersister() {
   return {
-    persistClient: async (client: PersistedClient) => {},
-    restoreClient: async () => {},
-    removeClient: async () => {},
+    persistClient: async (client: PersistedClient) => { },
+    restoreClient: async () => { },
+    removeClient: async () => { },
   } as Persister;
 }
 
@@ -45,7 +45,6 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: Infinity,
-      cacheTime: Infinity,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       retry: true,
@@ -68,6 +67,7 @@ export const ReactQueryProvider = ({ children }: PropsWithChildren) => {
     return;
   });
 
+
   const dehydratedState = dehydrate(client, {
     shouldDehydrateQuery: () => true,
   });
@@ -76,10 +76,10 @@ export const ReactQueryProvider = ({ children }: PropsWithChildren) => {
     <PersistQueryClientProvider
       client={client}
       persistOptions={{
-        persister: persister!,
+        persister: persister as unknown as Persister,
       }}
     >
-      <Hydrate state={dehydratedState}>{children}</Hydrate>
+      <HydrationBoundary state={dehydratedState}>{children}</HydrationBoundary>
     </PersistQueryClientProvider>
   );
 };

@@ -4,7 +4,31 @@ import { env } from "@/env.mjs";
 import { VerificationToken } from "next-auth/adapters";
 
 export class Worksmart {
-  constructor() {}
+  constructor() {
+    // Add response interceptor to log errors
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (axios.isAxiosError(error)) {
+          console.error("Axios error response:", {
+            url: error.config?.url,
+            status: error.response?.status,
+            data: error.response?.data,
+            headers: error.config?.headers,
+          });
+        }
+        return Promise.reject(error);
+      },
+    );
+  }
+
+  private getHeaders() {
+    return {
+      // "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
+      // Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
+      "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
+    };
+  }
 
   async getLogs(
     user_id: string,
@@ -24,10 +48,7 @@ export class Worksmart {
     const res = await axios.get(
       `${env.WORKSMART_API_URL}/v1/store/log?${new URLSearchParams(query)}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -39,10 +60,7 @@ export class Worksmart {
       const res = await axios.get(
         `${env.WORKSMART_API_URL}/v1/store/user?${new URLSearchParams(query)}`,
         {
-          headers: {
-            "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-            Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-          },
+          headers: this.getHeaders(),
         },
       );
       if (res.data.data.length > 0) {
@@ -65,7 +83,7 @@ export class Worksmart {
             )}`,
             {
               headers: {
-                "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
+                ...this.getHeaders(),
                 Authorization: `Bearer ${newToken}`,
               },
             },
@@ -100,10 +118,7 @@ export class Worksmart {
         provider_id: providerID,
       },
       {
-        headers: {
-          "x-dostow-group": env.WORKSMART_GROUP,
-          Authorization: `${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -140,6 +155,9 @@ export class Worksmart {
     const keyName = `ugk_${user_id}`;
     const existing = await axios.get(
       `${env.WORKSMART_API_URL}/v1/group_key/${id}`,
+      {
+        headers: this.getHeaders(),
+      },
     );
     if (!existing.data.name.includes(keyName)) {
       throw new Error("invalid key");
@@ -147,10 +165,7 @@ export class Worksmart {
     const res = await axios.delete(
       `${env.WORKSMART_API_URL}/v1/group_key/${id}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -164,10 +179,7 @@ export class Worksmart {
     const res = await axios.get(
       `${env.WORKSMART_API_URL}/v1/group_key?${new URLSearchParams(query)}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -191,10 +203,7 @@ export class Worksmart {
         ],
       },
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -226,10 +235,7 @@ export class Worksmart {
         key,
       },
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -240,10 +246,7 @@ export class Worksmart {
       `${env.WORKSMART_API_URL}/v1/store/push_session/${id}`,
       request,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -253,10 +256,7 @@ export class Worksmart {
     const res = await axios.get(
       `${env.WORKSMART_API_URL}/v1/store/instance/${id}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -297,9 +297,7 @@ export class Worksmart {
       `${env.WORKSMART_API_URL}/v1/store/tokens`,
       token,
       {
-        headers: {
-          "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -322,9 +320,7 @@ export class Worksmart {
         identifier,
       })}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP-ACCESS-KEY": env.WORKSMART_API_KEY,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -395,10 +391,7 @@ export class Worksmart {
         instance_type,
       },
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -413,10 +406,7 @@ export class Worksmart {
         error: "",
       },
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -431,10 +421,7 @@ export class Worksmart {
         error: "",
       },
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -448,10 +435,7 @@ export class Worksmart {
         query,
       )}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -470,10 +454,7 @@ export class Worksmart {
         phone_name: name,
       },
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -485,10 +466,7 @@ export class Worksmart {
     const res = await axios.get(
       `${env.WORKSMART_API_URL}/v1/store/channel?${new URLSearchParams(query)}`,
       {
-        headers: {
-          "X-DOSTOW-GROUP": env.WORKSMART_GROUP,
-          Authorization: `Bearer ${env.WORKSMART_AUTH_TOKEN}`,
-        },
+        headers: this.getHeaders(),
       },
     );
 
@@ -497,22 +475,23 @@ export class Worksmart {
 
   async refreshToken(): Promise<string> {
     try {
-      const res = await axios.post(`${env.WORKSMART_API_URL}/v1/auth/refresh`, {
-        refresh_token: env.WORKSMART_REFRESH_TOKEN,
-      });
-      if (res.data && res.data.token) {
-        // TODO: Implement mechanism to update the stored WORKSMART_AUTH_TOKEN with the new token
-        console.log("Worksmart token refreshed successfully.");
-        return res.data.token;
-      }
-      console.error(
-        "Worksmart token refresh failed: No token in response",
-        res.data,
+      const response = await axios.post<{ access_token: string }>(
+        `${env.WORKSMART_API_URL}/v1/auth/refresh`,
+        {
+          refresh_token: env.WORKSMART_REFRESH_TOKEN,
+        },
+        {
+          headers: this.getHeaders(),
+        },
       );
-      throw new Error("Worksmart token refresh failed: No token in response");
-    } catch (error) {
-      console.error("Worksmart token refresh failed:", error);
-      throw new Error("Worksmart token refresh failed");
+
+      if (!response.data?.access_token) {
+        throw new Error("No access token in refresh response");
+      }
+      return response.data.access_token;
+    } catch (error: unknown) {
+      console.error("Failed to refresh Worksmart token:", error);
+      throw new Error("Failed to refresh Worksmart token");
     }
   }
 }

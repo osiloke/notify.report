@@ -37,7 +37,7 @@ const nextConfig = {
   images: {
     domains: ["avatars.githubusercontent.com", "lh3.googleusercontent.com"],
   },
-  transpilePackages: ["react-tweet"],
+  transpilePackages: ["react-tweet", "next-auth"],
   serverExternalPackages: ["shiki"],
 };
 

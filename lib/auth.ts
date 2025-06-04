@@ -1,14 +1,18 @@
 import { env } from "@/env.mjs";
 import { sendVerificationRequest } from "@/lib/resend/emails/sendVerificationRequest";
-import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import EmailProvider from "next-auth/providers/email";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import worksmart from "./services/worksmart";
 import { WorksmartAdapter } from "./auth/adapter";
+import NextAuth from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const {
+  handlers: { GET, POST },
+  signIn,
+  signOut,
+  auth,
+} = NextAuth({
   adapter: WorksmartAdapter(worksmart),
   pages: {
     signIn: "/login",
@@ -18,12 +22,14 @@ export const authOptions: NextAuthOptions = {
   },
   debug: process.env.NODE_ENV === "development",
   providers: [
-    EmailProvider({
+    {
+      id: "email",
+      name: "Email",
       type: "email",
       server: "",
       from: env.RESEND_FROM_ADDRESS,
       sendVerificationRequest,
-    }),
+    },
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID!,
       clientSecret: env.GOOGLE_CLIENT_SECRET!,
@@ -49,15 +55,15 @@ export const authOptions: NextAuthOptions = {
               password: { label: "Password", type: "password" },
             },
             async authorize(
-              credentials: Record<"email" | "password", string> | undefined,
+              credentials: Partial<Record<"email" | "password", unknown>>,
               req,
             ) {
-              if (credentials === undefined) return null;
+              if (!credentials?.email || !credentials?.password) return null;
 
-              const existingUser = await worksmart.signin(
-                credentials.email,
-                credentials.password,
-              );
+              const email = credentials.email as string;
+              const password = credentials.password as string;
+
+              const existingUser = await worksmart.signin(email, password);
               if (!existingUser) return null;
 
               return existingUser;
@@ -71,7 +77,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id;
         // session.user.name = token.name;
-        session.user.email = token.email;
+        session.user.email = token.email ?? "";
         session.user.image = token.picture;
       }
       return session;
@@ -87,7 +93,7 @@ export const authOptions: NextAuthOptions = {
       if (email != "_") {
         dbUser = await worksmart.getUser(email);
         if (!dbUser) {
-          dbUser = await worksmart.createUser(email, "", user.id);
+          dbUser = await worksmart.createUser(email, "", user.id ?? "");
         }
       }
 
@@ -119,7 +125,7 @@ export const authOptions: NextAuthOptions = {
               await worksmart.createUser(
                 profile.email,
                 account!.provider,
-                user.id,
+                user.id ?? "",
               );
             }
           }
@@ -144,4 +150,4 @@ export const authOptions: NextAuthOptions = {
       // );
     },
   },
-};
+});

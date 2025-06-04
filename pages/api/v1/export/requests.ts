@@ -1,14 +1,13 @@
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { parseISO } from "date-fns";
 import { json2csv } from "json-2-csv";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await auth();
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
   }

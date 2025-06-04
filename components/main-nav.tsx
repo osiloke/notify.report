@@ -22,28 +22,28 @@ const components: {
   description: string;
   video?: string;
 }[] = [
-  {
-    title: "OpenAI Analytics",
-    href: "https://docs.wuuf/features/openai",
-    description:
-      "Enter your OpenAI API key and get access to a dashboard of analytics.",
-    video: "https://cdn.wuuf/openai-demo.mp4",
-  },
-  {
-    title: "Logging",
-    href: "https://docs.wuuf/features/logs",
-    description:
-      "Log your prompts to gain insights about latency, cost per request, and more.",
-    video: "https://cdn.wuuf/logs-demo.mp4",
-  },
-  {
-    title: "User Analytics",
-    href: "https://docs.wuuf/features/users",
-    description:
-      "Understand your cost per user, discover your power users, and adjust your pricing strategy.",
-    video: "https://cdn.wuuf/users-demo.mp4",
-  },
-];
+    {
+      title: "OpenAI Analytics",
+      href: "https://docs.wuuf/features/openai",
+      description:
+        "Enter your OpenAI API key and get access to a dashboard of analytics.",
+      video: "https://cdn.wuuf/openai-demo.mp4",
+    },
+    {
+      title: "Logging",
+      href: "https://docs.wuuf/features/logs",
+      description:
+        "Log your prompts to gain insights about latency, cost per request, and more.",
+      video: "https://cdn.wuuf/logs-demo.mp4",
+    },
+    {
+      title: "User Analytics",
+      href: "https://docs.wuuf/features/users",
+      description:
+        "Understand your cost per user, discover your power users, and adjust your pricing strategy.",
+      video: "https://cdn.wuuf/users-demo.mp4",
+    },
+  ];
 
 interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
   video?: string;
@@ -151,18 +151,20 @@ export function MainNav() {
             </NavigationMenuContent>
           </NavigationMenuItem> */}
           <NavigationMenuItem>
-            <Link href="https://zaap.mintlify.app" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Docs
-              </NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink
+              href="https://zaap.mintlify.app"
+              className={navigationMenuTriggerStyle()}
+            >
+              Docs
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/pricing" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Pricing
-              </NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink
+              href="/pricing"
+              className={navigationMenuTriggerStyle()}
+            >
+              Pricing
+            </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
